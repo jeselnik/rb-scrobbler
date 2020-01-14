@@ -1,5 +1,4 @@
-use std::fs::File;
-use std::io::prelude::*;
+mod logops;
 extern crate clap;
 use clap::{Arg, App};
 
@@ -27,12 +26,10 @@ fn main() {
     let arguments = app.get_matches();
 
     let file_path = arguments.value_of("file").unwrap();
-    /* Get argument value and unwrap to type str, then parse the string and unwrap string */
+    /* Get argument value and unwrap to type str, then parse the string and unwrap str for 
+     * conversion to f32*/
     let timezone_offset: f32 = arguments.value_of("offset").unwrap().parse().unwrap();
 
-    println!("{}", file_path);
-    println!("{}", timezone_offset);
-
-    let file = File::open(file_path);
+    print!("{}\t{}\n", file_path, timezone_offset);
 
 }
