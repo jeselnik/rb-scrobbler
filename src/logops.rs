@@ -22,10 +22,12 @@ pub fn log_to_vec(path: &str) -> Result<&str, &str> {
     } else {
         //let mut tracks = vec::Vec::new();
         let file_as_lines: Vec<&str> = file.lines().collect();
-        for index in TRACKS_BEGIN_INDEX..file_as_lines.len() {
-            println!("{}", file_as_lines[index]);
-        }
 
+        for index in TRACKS_BEGIN_INDEX..file_as_lines.len() {
+            if file_as_lines[index].contains(LISTENED) {
+                println!("{}", file_as_lines[index]);
+            }
+        }
 
         return result::Result::Ok("Yeah it's working'");
     }
