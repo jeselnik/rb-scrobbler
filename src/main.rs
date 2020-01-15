@@ -28,10 +28,17 @@ fn main() {
     let file_path = arguments.value_of("file").unwrap();
     /* Get argument value and unwrap to type str, then parse the string and unwrap str for 
      * conversion to f32*/
-    let timezone_offset: f32 = arguments.value_of("offset").unwrap().parse().unwrap();
+    let timezone_offset: f32 = arguments.value_of("offset").unwrap()
+        .parse().unwrap();
 
-    print!("{}\t{}\n", file_path, timezone_offset);
+    let mut _tracks = logops::log_to_vec(file_path);
 
-    logops::log_to_vec(file_path);
+    if timezone_offset != 0.0 {
+        /* Convert track timestamps to UTC */
+    }
+
+    /* Scrobble */
+
+    /* Ask user if they want to delete file */
 
 }
