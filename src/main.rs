@@ -32,4 +32,6 @@ fn main() {
 
     print!("{}\t{}\n", file_path, timezone_offset);
 
+    logops::log_to_vec(file_path);
+
 }
