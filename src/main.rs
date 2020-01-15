@@ -1,4 +1,4 @@
-mod logops;
+mod log;
 extern crate clap;
 use clap::{Arg, App};
 
@@ -31,7 +31,7 @@ fn main() {
     let timezone_offset: f32 = arguments.value_of("offset").unwrap()
         .parse().unwrap();
 
-    let mut _tracks = logops::log_to_vec(file_path);
+    let mut _tracks = log::as_vec(file_path);
 
     if timezone_offset != 0.0 {
         /* Convert track timestamps to UTC */

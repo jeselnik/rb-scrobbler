@@ -21,7 +21,7 @@ pub struct Track {
     pub timestamp: u64,
 }
 
-pub fn log_to_vec(path: &str) -> vec::Vec<Track> {
+pub fn as_vec(path: &str) -> vec::Vec<Track> {
     let file = fs::read_to_string(path).expect("Error Opening File");
 
     if !file.contains(AUDIOSCROBBLER_HEADER) {
