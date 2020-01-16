@@ -1,6 +1,10 @@
 use std::fs;
 use std::string;
 use std::vec;
+use std::time::UNIX_EPOCH;
+extern crate chrono;
+use chrono::Utc;
+extern crate time;
 
 const AUDIOSCROBBLER_HEADER: &str = "#AUDIOSCROBBLER/";
 const LISTENED: &str = "\tL\t";
@@ -46,5 +50,21 @@ pub fn as_vec(path: &str) -> vec::Vec<Track> {
         }
 
         return tracks;
+    }
+}
+
+impl Track {
+    pub fn convert_time(&mut self, offset: i64) {
+        let raw_time = UNIX_EPOCH + 
+            std::time::Duration::from_secs(self.timestamp);
+
+        let in_datetime = chrono::prelude::DateTime::<Utc>::from(raw_time);
+
+        let converted = in_datetime.checked_sub_signed
+            (time::Duration::minutes(offset));
+
+        let in_unix: i64 = converted.unwrap().timestamp();
+
+        self.timestamp = in_unix as u64;
     }
 }
