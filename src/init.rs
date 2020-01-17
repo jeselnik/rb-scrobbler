@@ -1,7 +1,7 @@
 extern crate clap;
 use clap::{App, Arg};
 
-pub fn app_info() -> clap::App<'static,'static> {
+pub fn app_info() -> clap::App<'static, 'static> {
     let app = App::new("Minimal Rockbox Scrobbler")
         .version("0.1")
         .author("Eddie Jeselnik <eddie@jeselnik.xyz>")
@@ -27,24 +27,29 @@ pub fn app_info() -> clap::App<'static,'static> {
         )
         .arg(
             Arg::with_name("user")
-            .short("u")
-            .long("username")
-            .value_name("USERNAME")
-            .help("Your last.fm username (only required for 
-            initial authentication)")
-            .required(false)
-            .takes_value(true)
-            .default_value("")
-            )
+                .short("u")
+                .long("username")
+                .value_name("USERNAME")
+                .help(
+                    "Your last.fm username (only required for 
+            initial authentication)",
+                )
+                .required(false)
+                .takes_value(true)
+                .default_value(""),
+        )
         .arg(
             Arg::with_name("pass")
-            .short("p")
-            .long("password")
-            .value_name("PASSWORD (only required for 
-            initial authentication)")
-            .required(false)
-            .takes_value(true)
-            .default_value(""));
+                .short("p")
+                .long("password")
+                .value_name(
+                    "PASSWORD (only required for 
+            initial authentication)",
+                )
+                .required(false)
+                .takes_value(true)
+                .default_value(""),
+        );
 
     return app;
 }
