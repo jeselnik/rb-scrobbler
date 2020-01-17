@@ -1,11 +1,9 @@
+mod auth;
 mod init;
 mod log;
-extern crate app_dirs;
-use app_dirs::*;
 extern crate rustfm_scrobble;
 
 fn main() {
-    const APP_INFO: app_dirs::AppInfo = app_dirs::AppInfo{name:"rb-scrobbler", author:"Eddie Jeselnik"};
     const API_KEY: &str = "INSERT_API_KEY";
     const API_SECRET: &str = "INSERT_API_SECRET";
 
