@@ -1,6 +1,10 @@
+use std::io;
 mod log;
+extern crate app_dirs;
+use app_dirs::*;
 extern crate clap;
 use clap::{App, Arg};
+extern crate rustfm_scrobble;
 
 fn main() {
     let app = App::new("Minimal Rockbox Scrobbler")
@@ -47,7 +51,20 @@ fn main() {
             .takes_value(true)
             .default_value(""));
 
+    const APP_INFO: app_dirs::AppInfo = app_dirs::AppInfo{name:"rb-scrobbler", author:"Eddie Jeselnik"};
     let arguments = app.get_matches();
+
+    let username = arguments.value_of("user").unwrap();
+    let password = arguments.value_of("pass").unwrap();
+
+    const API_KEY: &str = "INSERT_API_KEY";
+    const API_SECRET: &str = "INSERT_API_SECRET";
+
+    if username != "" && password != "" {
+        let mut scrobbler = rustfm_scrobble::Scrobbler::new(API_KEY, API_SECRET);
+        let response = scrobbler.authenticate_with_password(username, password);
+        println!("{:?}", response);
+    }
 
     let file_path = arguments.value_of("file").unwrap();
     /* Get argument value and unwrap to type str, then parse the string and unwrap str for
