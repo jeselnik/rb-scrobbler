@@ -1,5 +1,5 @@
 extern crate clap;
-use clap::{App, Arg};
+use clap::{App, Arg, SubCommand};
 
 pub fn app_info() -> clap::App<'static, 'static> {
     let app = App::new("Minimal Rockbox Scrobbler")
@@ -25,30 +25,27 @@ pub fn app_info() -> clap::App<'static, 'static> {
                 .takes_value(true)
                 .default_value("0"),
         )
-        .arg(
-            Arg::with_name("user")
-                .short("u")
-                .long("username")
-                .value_name("USERNAME")
-                .help(
-                    "Your last.fm username (only required for 
-            initial authentication)",
+        .subcommand(
+            SubCommand::with_name("auth")
+                .about("Authenticate with last.fm (only required once)")
+                .arg(
+                    Arg::with_name("username")
+                        .short("u")
+                        .long("user")
+                        .value_name("USERNAME")
+                        .help("Your last.fm username")
+                        .required(true)
+                        .takes_value(true),
                 )
-                .required(false)
-                .takes_value(true)
-                .default_value(""),
-        )
-        .arg(
-            Arg::with_name("pass")
-                .short("p")
-                .long("password")
-                .value_name(
-                    "PASSWORD (only required for 
-            initial authentication)",
-                )
-                .required(false)
-                .takes_value(true)
-                .default_value(""),
+                .arg(
+                    Arg::with_name("password")
+                        .short("p")
+                        .long("pass")
+                        .value_name("PASSWORD")
+                        .help("Your last.fm password")
+                        .required(true)
+                        .takes_value(true),
+                ),
         );
 
     return app;
