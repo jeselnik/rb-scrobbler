@@ -23,17 +23,7 @@ fn main() {
         println!("{:?}", response);
     }
 
-    let mut tracks = log::as_vec(file_path);
-
-    println!("{}", tracks[0].timestamp);
-
-    if timezone_offset != 0.0 {
-        for index in 0..tracks.len() {
-            tracks[index].convert_time((timezone_offset * 60.0) as i64);
-        }
-    }
-
-    println!("{}", tracks[0].timestamp);
+    let _scrobbles = log::as_vec(file_path, (timezone_offset * 60.0) as i64);
 
     /* Scrobble */
 

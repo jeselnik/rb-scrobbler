@@ -1,10 +1,11 @@
 use std::fs;
-use std::string;
 use std::time::UNIX_EPOCH;
 use std::vec;
 extern crate chrono;
 use chrono::Utc;
+extern crate rustfm_scrobble;
 extern crate time;
+use rustfm_scrobble::Scrobble;
 
 const AUDIOSCROBBLER_HEADER: &str = "#AUDIOSCROBBLER/";
 const LISTENED: &str = "\tL\t";
@@ -18,50 +19,40 @@ const ALBUM_INDEX: usize = 1;
 const TITLE_INDEX: usize = 2;
 const TIMESTAMP_INDEX: usize = 6;
 
-pub struct Track {
-    pub artist: String,
-    pub album: String,
-    pub title: String,
-    pub timestamp: u64,
-}
-
-pub fn as_vec(path: &str) -> vec::Vec<Track> {
+pub fn as_vec(path: &str, offset: i64) -> vec::Vec<Scrobble> {
     let file = fs::read_to_string(path).expect("Error Opening File");
 
     if !file.contains(AUDIOSCROBBLER_HEADER) {
         panic!("Not a valid .scrobbler.log!");
     } else {
-        let mut tracks = vec::Vec::new();
+        let mut scrobbles = vec::Vec::new();
         let file_as_lines: Vec<&str> = file.lines().collect();
 
         for index in TRACKS_BEGIN_INDEX..file_as_lines.len() {
             if file_as_lines[index].contains(LISTENED) {
                 let track_str: Vec<&str> = file_as_lines[index].split(SEPARATOR).collect();
 
-                let track = Track {
-                    artist: string::String::from(track_str[ARTIST_INDEX]),
-                    album: string::String::from(track_str[ALBUM_INDEX]),
-                    title: string::String::from(track_str[TITLE_INDEX]),
-                    timestamp: track_str[TIMESTAMP_INDEX].parse().unwrap(),
-                };
+                let mut scrobble = Scrobble::new(
+                    track_str[ARTIST_INDEX],
+                    track_str[TITLE_INDEX],
+                    track_str[ALBUM_INDEX],
+                );
 
-                &tracks.push(track);
+                if offset != 0 {
+                    scrobble.with_timestamp(convert_time(offset, track_str[TIMESTAMP_INDEX]));
+                }
+
+                &scrobbles.push(scrobble);
             }
         }
-        return tracks;
+        return scrobbles;
     }
 }
 
-impl Track {
-    pub fn convert_time(&mut self, offset: i64) {
-        let raw_time = UNIX_EPOCH + std::time::Duration::from_secs(self.timestamp);
-
-        let in_datetime = chrono::prelude::DateTime::<Utc>::from(raw_time);
-
-        let converted = in_datetime.checked_sub_signed(time::Duration::minutes(offset));
-
-        let in_unix: i64 = converted.unwrap().timestamp();
-
-        self.timestamp = in_unix as u64;
-    }
+fn convert_time(offset: i64, timestamp: &str) -> u64 {
+    let casted_timestamp: u64 = timestamp.parse().unwrap();
+    let raw_time = UNIX_EPOCH + std::time::Duration::from_secs(casted_timestamp);
+    let in_datetime = chrono::prelude::DateTime::<Utc>::from(raw_time);
+    let converted = in_datetime.checked_sub_signed(time::Duration::minutes(offset));
+    return converted.unwrap().timestamp() as u64;
 }
