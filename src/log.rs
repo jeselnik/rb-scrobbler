@@ -19,7 +19,7 @@ const ALBUM_INDEX: usize = 1;
 const TITLE_INDEX: usize = 2;
 const TIMESTAMP_INDEX: usize = 6;
 
-pub fn as_vec(path: &str, offset: i64) -> vec::Vec<Scrobble> {
+pub fn as_scrobbles(path: &str, offset: i64) -> vec::Vec<Scrobble> {
     let file = fs::read_to_string(path).expect("Error Opening File");
 
     if !file.contains(AUDIOSCROBBLER_HEADER) {

@@ -17,10 +17,11 @@ fn main() {
     let timezone_offset: f32 = arguments.value_of("offset").unwrap().parse().unwrap();
 
     let mut scrobbler = rustfm_scrobble::Scrobbler::new(API_KEY, API_SECRET);
+
     let response = scrobbler.authenticate_with_password(username, password);
     println!("{:?}", response);
 
-    let scrobbles = log::as_vec(file_path, (timezone_offset * 60.0) as i64);
+    let scrobbles = log::as_scrobbles(file_path, (timezone_offset * 60.0) as i64);
 
     for index in 0..scrobbles.len() {
         let scrobble_response = scrobbler.scrobble(&scrobbles[index]);
