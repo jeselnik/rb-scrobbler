@@ -1,11 +1,10 @@
-mod auth;
 mod init;
 mod log;
 extern crate rustfm_scrobble;
 
 fn main() {
-    const API_KEY: &str = "INSERT_API_KEY";
-    const API_SECRET: &str = "INSERT_API_SECRET";
+    const API_KEY: &str = "";
+    const API_SECRET: &str = "";
 
     let app = init::app_info();
 
@@ -17,15 +16,17 @@ fn main() {
      * conversion to f32*/
     let timezone_offset: f32 = arguments.value_of("offset").unwrap().parse().unwrap();
 
-    if username != "" && password != "" {
-        let mut scrobbler = rustfm_scrobble::Scrobbler::new(API_KEY, API_SECRET);
-        let response = scrobbler.authenticate_with_password(username, password);
-        println!("{:?}", response);
+    let mut scrobbler = rustfm_scrobble::Scrobbler::new(API_KEY, API_SECRET);
+    let response = scrobbler.authenticate_with_password(username, password);
+    println!("{:?}", response);
+
+    let scrobbles = log::as_vec(file_path, (timezone_offset * 60.0) as i64);
+
+    for index in 0..scrobbles.len() {
+        let scrobble_response = scrobbler.scrobble(&scrobbles[index]);
+        println!("{:?}", scrobble_response);
     }
 
-    let _scrobbles = log::as_vec(file_path, (timezone_offset * 60.0) as i64);
-
-    /* Scrobble */
 
     /* Ask user if they want to delete file */
 }
