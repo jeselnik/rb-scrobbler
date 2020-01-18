@@ -1,3 +1,4 @@
+mod auth;
 mod init;
 mod log;
 extern crate rustfm_scrobble;
