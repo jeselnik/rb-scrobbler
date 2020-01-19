@@ -51,9 +51,7 @@ pub fn as_scrobbles(path: &str, offset: i64) -> vec::Vec<Scrobble> {
 
 fn convert_time(offset: i64, timestamp: &str) -> u64 {
     let casted_timestamp: u64 = timestamp.parse().unwrap();
-    /* Subtracting this hour is a temporary hack to fix scrobbles being sent an hour into the
-     * future. Right now it's a low priority to fix with the program not finished yet */
-    let raw_time = UNIX_EPOCH + std::time::Duration::from_secs(casted_timestamp) - std::time::Duration::from_secs(3600);
+    let raw_time = UNIX_EPOCH + std::time::Duration::from_secs(casted_timestamp);
     let in_datetime = chrono::prelude::DateTime::<Utc>::from(raw_time);
     let converted = in_datetime.checked_sub_signed(time::Duration::minutes(offset));
     return converted.unwrap().timestamp() as u64;
