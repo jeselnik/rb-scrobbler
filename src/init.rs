@@ -27,26 +27,7 @@ pub fn app_info() -> clap::App<'static, 'static> {
         )
         .subcommand(
             SubCommand::with_name("auth")
-                .about("Authenticate with last.fm (only required once)")
-                .arg(
-                    Arg::with_name("username")
-                        .short("u")
-                        .long("user")
-                        .value_name("USERNAME")
-                        .help("Your last.fm username")
-                        .required(true)
-                        .takes_value(true),
-                )
-                .arg(
-                    Arg::with_name("password")
-                        .short("p")
-                        .long("pass")
-                        .value_name("PASSWORD")
-                        .help("Your last.fm password")
-                        .required(true)
-                        .takes_value(true),
-                ),
-        );
+                .about("Authenticate with last.fm (only required once)"));
 
     return app;
 }

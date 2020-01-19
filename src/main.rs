@@ -10,17 +10,17 @@ fn main() {
     let app = init::app_info();
 
     let arguments = app.get_matches();
-    let username = arguments.value_of("user").unwrap();
-    let password = arguments.value_of("pass").unwrap();
-    let file_path = arguments.value_of("file").unwrap();
+    let file_path = arguments.value_of("file")
+        .expect("Failed to parse file path!");
     /* Get argument value and unwrap to type str, then parse the string and unwrap str for
      * conversion to f32*/
     let timezone_offset: f32 = arguments.value_of("offset").unwrap().parse().unwrap();
 
     let mut scrobbler = rustfm_scrobble::Scrobbler::new(API_KEY, API_SECRET);
 
-    let response = scrobbler.authenticate_with_password(username, password);
-    println!("{:?}", response);
+   if arguments.is_present("auth") {
+       auth::initial_authentication(&mut scrobbler, username, password);
+    } 
 
     let scrobbles = log::as_scrobbles(file_path, (timezone_offset * 60.0) as i64);
 
@@ -28,7 +28,6 @@ fn main() {
         let scrobble_response = scrobbler.scrobble(&scrobbles[index]);
         println!("{:?}", scrobble_response);
     }
-
 
     /* Ask user if they want to delete file */
 }
