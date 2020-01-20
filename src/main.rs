@@ -33,10 +33,17 @@ fn main() {
 
     let scrobbles = log::as_scrobbles(file_path, (timezone_offset * 60.0) as i64);
 
-    for index in 0..scrobbles.len() {
-        let scrobble_response = scrobbler.scrobble(&scrobbles[index]);
-        println!("{:?}", scrobble_response);
+    for individual_scrobble in scrobbles {
+        let scrob_response = scrobbler.scrobble(&individual_scrobble);
+        if scrob_response.is_ok() {
+            println!("[OK] {} - {}", individual_scrobble.artist(), individual_scrobble.track());
+        }
+        else {
+            println!("[FAIL] {} - {}", individual_scrobble.artist(), individual_scrobble.track());
+        }
     }
+
+    println!("Delete \"{}\"?", file_path);
 
     /* Ask user if they want to delete file */
 }
