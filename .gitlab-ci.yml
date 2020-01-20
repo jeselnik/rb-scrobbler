@@ -1,5 +1,13 @@
 image: "rust:latest"
 
+before_script:
+        - export CARGO_HOME = "$CI_PROJECT_DIR/.cargo"
+
+cache:
+        paths:
+                - .cargo
+                - target
+
 # Use cargo to test the project
 test:cargo:
   script:
