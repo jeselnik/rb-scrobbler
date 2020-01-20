@@ -3,6 +3,7 @@ mod auth;
 mod init;
 mod log;
 extern crate rustfm_scrobble;
+use std::{fs, io, string};
 
 fn main() {
     let app = init::app_info();
@@ -51,5 +52,16 @@ fn main() {
         }
     }
 
-    /* Ask user if they want to delete file */
+    println!("Delete file \"{}\"?", file_path);
+
+    let mut user_choice = string::String::new();
+    io::stdin().read_line(&mut user_choice)
+        .expect("Failed to read from stdout!");
+
+    if user_choice.to_lowercase().starts_with("y") {
+        fs::remove_file(file_path)
+            .expect("I/O Error!");
+        println!("\"{}\" deleted!", file_path);
+    }
+
 }
