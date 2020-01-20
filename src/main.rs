@@ -14,7 +14,11 @@ fn main() {
         .expect("Failed to parse file path!");
     /* Get argument value and unwrap to type str, then parse the string and unwrap str for
      * conversion to f32*/
-    let timezone_offset: f32 = arguments.value_of("offset").unwrap().parse().unwrap();
+    let timezone_offset: f32 = arguments
+        .value_of("offset")
+        .unwrap()
+        .parse()
+        .expect("Offset not a number!");
 
     let mut scrobbler = rustfm_scrobble::Scrobbler::new(api_keys::API_KEY, api_keys::API_SECRET);
 
@@ -55,13 +59,12 @@ fn main() {
     println!("Delete file \"{}\"?", file_path);
 
     let mut user_choice = string::String::new();
-    io::stdin().read_line(&mut user_choice)
+    io::stdin()
+        .read_line(&mut user_choice)
         .expect("Failed to read from stdout!");
 
     if user_choice.to_lowercase().starts_with("y") {
-        fs::remove_file(file_path)
-            .expect("I/O Error!");
+        fs::remove_file(file_path).expect("I/O Error!");
         println!("\"{}\" deleted!", file_path);
     }
-
 }
