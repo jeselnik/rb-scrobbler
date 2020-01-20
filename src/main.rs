@@ -29,6 +29,8 @@ fn main() {
         auth::initial_authentication(&mut scrobbler, username, password);
     }
 
+    auth::authenticate_key(&mut scrobbler);
+
     let scrobbles = log::as_scrobbles(file_path, (timezone_offset * 60.0) as i64);
 
     for index in 0..scrobbles.len() {
