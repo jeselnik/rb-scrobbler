@@ -1,7 +1,7 @@
 image: "rust:latest"
 
 before_script:
-        - export CARGO_HOME = "$CI_PROJECT_DIR/.cargo"
+        - export CARGO_HOME ="$CI_PROJECT_DIR/.cargo"
 
 cache:
         paths:
