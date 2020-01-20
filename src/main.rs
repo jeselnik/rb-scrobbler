@@ -10,7 +10,8 @@ fn main() {
     let app = init::app_info();
 
     let arguments = app.get_matches();
-    let file_path = arguments.value_of("file")
+    let file_path = arguments
+        .value_of("file")
         .expect("Failed to parse file path!");
     /* Get argument value and unwrap to type str, then parse the string and unwrap str for
      * conversion to f32*/
@@ -18,9 +19,15 @@ fn main() {
 
     let mut scrobbler = rustfm_scrobble::Scrobbler::new(API_KEY, API_SECRET);
 
-   if arguments.is_present("auth") {
-       auth::initial_authentication(&mut scrobbler, username, password);
-    } 
+    if arguments.is_present("auth") {
+        let auth_args = arguments.subcommand_matches("auth")
+            .expect("Couldn't unwrap subcommand matches!");
+        let username = auth_args.value_of("user")
+            .expect("Couldn't unwrap username!");
+        let password = auth_args.value_of("pass")
+            .expect("Couldn't unwrap password!");
+        auth::initial_authentication(&mut scrobbler, username, password);
+    }
 
     let scrobbles = log::as_scrobbles(file_path, (timezone_offset * 60.0) as i64);
 
