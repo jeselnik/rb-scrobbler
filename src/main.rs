@@ -1,12 +1,10 @@
+mod api_keys;
 mod auth;
 mod init;
 mod log;
 extern crate rustfm_scrobble;
 
 fn main() {
-    const API_KEY: &str = "";
-    const API_SECRET: &str = "";
-
     let app = init::app_info();
 
     let arguments = app.get_matches();
@@ -17,7 +15,7 @@ fn main() {
      * conversion to f32*/
     let timezone_offset: f32 = arguments.value_of("offset").unwrap().parse().unwrap();
 
-    let mut scrobbler = rustfm_scrobble::Scrobbler::new(API_KEY, API_SECRET);
+    let mut scrobbler = rustfm_scrobble::Scrobbler::new(api_keys::API_KEY, api_keys::API_SECRET);
 
     if arguments.is_present("auth") {
         let auth_args = arguments
