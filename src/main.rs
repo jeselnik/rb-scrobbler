@@ -20,11 +20,14 @@ fn main() {
     let mut scrobbler = rustfm_scrobble::Scrobbler::new(API_KEY, API_SECRET);
 
     if arguments.is_present("auth") {
-        let auth_args = arguments.subcommand_matches("auth")
+        let auth_args = arguments
+            .subcommand_matches("auth")
             .expect("Couldn't unwrap subcommand matches!");
-        let username = auth_args.value_of("user")
+        let username = auth_args
+            .value_of("user")
             .expect("Couldn't unwrap username!");
-        let password = auth_args.value_of("pass")
+        let password = auth_args
+            .value_of("pass")
             .expect("Couldn't unwrap password!");
         auth::initial_authentication(&mut scrobbler, username, password);
     }
@@ -36,14 +39,19 @@ fn main() {
     for individual_scrobble in scrobbles {
         let scrob_response = scrobbler.scrobble(&individual_scrobble);
         if scrob_response.is_ok() {
-            println!("[OK] {} - {}", individual_scrobble.artist(), individual_scrobble.track());
-        }
-        else {
-            println!("[FAIL] {} - {}", individual_scrobble.artist(), individual_scrobble.track());
+            println!(
+                "[OK] {} - {}",
+                individual_scrobble.artist(),
+                individual_scrobble.track()
+            );
+        } else {
+            println!(
+                "[FAIL] {} - {}",
+                individual_scrobble.artist(),
+                individual_scrobble.track()
+            );
         }
     }
-
-    println!("Delete \"{}\"?", file_path);
 
     /* Ask user if they want to delete file */
 }

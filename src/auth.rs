@@ -28,14 +28,12 @@ pub fn initial_authentication(scrob: &mut rustfm_scrobble::Scrobbler, user: &str
 }
 
 pub fn authenticate_key(scrob: &mut rustfm_scrobble::Scrobbler) {
-    let mut key_directory = config_dir()
-        .expect("Couldn't get config directory");
+    let mut key_directory = config_dir().expect("Couldn't get config directory");
     key_directory.push("rb-scrobbler");
     key_directory.push("session");
     key_directory.set_extension("key");
 
-    let session_key = fs::read_to_string(key_directory)
-        .expect("Couldn't open session key!");
+    let session_key = fs::read_to_string(key_directory).expect("Couldn't open session key!");
 
     let key_str_prim: &str = &session_key;
 
