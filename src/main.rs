@@ -56,7 +56,7 @@ fn main() {
         }
     }
 
-    println!("Delete file \"{}\"?", file_path);
+    print!("Delete file \"{}\"? [y/n]", file_path);
 
     let mut user_choice = string::String::new();
     io::stdin()
@@ -65,6 +65,6 @@ fn main() {
 
     if user_choice.to_lowercase().starts_with("y") {
         fs::remove_file(file_path).expect("I/O Error!");
-        println!("\"{}\" deleted!", file_path);
+        println!("\n\"{}\" deleted!", file_path);
     }
 }
