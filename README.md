@@ -43,7 +43,13 @@ All that is required is an installation of the Rust toolchain and a last.fm [API
 
 A .scrobbler.log file looks like this:
 
-(placeholder)
+```
+#AUDIOSCROBBLER/1.1
+#TZ/UNKNOWN
+#CLIENT/Rockbox ipod6g $Revision$
+50 Cent Get Rich Or Die Tryin'  Intro   1   6   L   1579643454
+50 Cent Get Rich Or Die Tryin'  What Up Gangsta 2   179 L   1579643462
+```
 
 It's a tab separated file of fields [ARTIST, ALBUM, TRACK, TRACK_POS, DURATION(sec), "RATING", TIMESTAMP(unix)].
 rb-scrobbler iterates over each line, looks if the "RATING" field is marked "listened" (\tL\t),
