@@ -37,6 +37,7 @@ fn main() {
 
     auth::authenticate_key(&mut scrobbler);
 
+    /* Duration calculations have to be done in minutes as opposed to hours */
     let scrobbles = log::as_scrobbles(file_path, (timezone_offset * 60.0) as i64);
 
     for individual_scrobble in scrobbles {
@@ -56,7 +57,7 @@ fn main() {
         }
     }
 
-    print!("Delete file \"{}\"? [y/n]", file_path);
+    println!("Delete file \"{}\"? [y/n]", file_path);
 
     let mut user_choice = string::String::new();
     io::stdin()
@@ -65,6 +66,6 @@ fn main() {
 
     if user_choice.to_lowercase().starts_with("y") {
         fs::remove_file(file_path).expect("I/O Error!");
-        println!("\n\"{}\" deleted!", file_path);
+        println!("{}\" deleted!", file_path);
     }
 }
