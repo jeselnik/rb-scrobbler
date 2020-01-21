@@ -11,8 +11,6 @@ const AUDIOSCROBBLER_HEADER: &str = "#AUDIOSCROBBLER/";
 const LISTENED: &str = "\tL\t";
 const SEPARATOR: &str = "\t";
 
-/* Track data begins after this line in the log */
-const TRACKS_BEGIN_INDEX: usize = 3;
 /* Indexes used when iterating over track data */
 const ARTIST_INDEX: usize = 0;
 const ALBUM_INDEX: usize = 1;
@@ -25,12 +23,12 @@ pub fn as_scrobbles(path: &str, offset: i64) -> vec::Vec<Scrobble> {
     if !file.contains(AUDIOSCROBBLER_HEADER) {
         panic!("Not a valid .scrobbler.log!");
     } else {
-        let mut scrobbles = vec::Vec::new();
-        let file_as_lines: Vec<&str> = file.lines().collect();
+        let mut scrobbles = Vec::new();
+        let file_as_lines = file.lines();
 
-        for index in TRACKS_BEGIN_INDEX..file_as_lines.len() {
-            if file_as_lines[index].contains(LISTENED) {
-                let track_str: Vec<&str> = file_as_lines[index].split(SEPARATOR).collect();
+        for line in file_as_lines {
+            if line.contains(LISTENED) {
+                let track_str: vec::Vec<&str> = line.split(SEPARATOR).collect();
 
                 let mut scrobble = Scrobble::new(
                     track_str[ARTIST_INDEX],
@@ -40,9 +38,11 @@ pub fn as_scrobbles(path: &str, offset: i64) -> vec::Vec<Scrobble> {
 
                 if offset != 0 {
                     scrobble.with_timestamp(convert_time(offset, track_str[TIMESTAMP_INDEX]));
+                } else {
+                    let timestamp: u64 = track_str[TIMESTAMP_INDEX].parse().unwrap();
+                    scrobble.with_timestamp(timestamp);
                 }
-
-                &scrobbles.push(scrobble);
+                scrobbles.push(scrobble);
             }
         }
         return scrobbles;
