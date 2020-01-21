@@ -1,6 +1,6 @@
 use std::fs;
 extern crate dirs;
-use dirs::*;
+use dirs::config_dir;
 extern crate rustfm_scrobble;
 
 pub fn initial_authentication(scrob: &mut rustfm_scrobble::Scrobbler, user: &str, pass: &str) {
