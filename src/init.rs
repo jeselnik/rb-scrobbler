@@ -26,26 +26,15 @@ pub fn app_info() -> clap::App<'static, 'static> {
                 .default_value("0"),
         )
         .arg(
-            Arg::with_name("keep")
-            .short("k")
-            .long("keep")
-            .value_name("KEEP")
-            .help("Parameter for non interactive scrobbling which
-                  keeps the log file")
+            Arg::with_name("non-interactive")
+            .short("n")
+            .long("non-interactive")
+            .value_name("NON-INTERACTIVE")
+            .help("Skip the delete question during runtime
+                  with a preset choice")
             .required(false)
-            .takes_value(false)
-            .default_value("true")
-        )
-        .arg(
-            Arg::with_name("delete")
-            .short("d")
-            .long("delete")
-            .value_name("DELETE")
-            .help("Paramater for non interactive scrobbling which
-                  deletes the log file")
-            .required(false)
-            .takes_value(false)
-            .default_value("true")
+            .takes_value(true)
+            .default_value("keep")
         )
         .subcommand(
             SubCommand::with_name("auth")
