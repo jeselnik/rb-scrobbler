@@ -3,7 +3,7 @@ use clap::{App, Arg, SubCommand};
 
 pub fn app_info() -> clap::App<'static, 'static> {
     let app = App::new("Minimal Rockbox Scrobbler")
-        .version("0.1")
+        .version("0.2")
         .author("Eddie Jeselnik <eddie@jeselnik.xyz>")
         .about("Submit .scrobbler.log files to last.fm")
         .arg(
