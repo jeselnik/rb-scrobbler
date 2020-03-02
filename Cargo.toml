@@ -12,3 +12,9 @@ chrono = "0.4"
 dirs = "2.0.2"
 rustfm-scrobble="1.0"
 time = "0.1"
+
+[profile.dev]
+opt-level = 0
+
+[profile.release]
+opt-level = 3
