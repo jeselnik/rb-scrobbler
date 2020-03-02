@@ -57,15 +57,33 @@ fn main() {
         }
     }
 
-    println!("Delete file \"{}\"? [y/n]", file_path);
+    /* Can't find a way for multi line in match 
+     * I could be overlooking something but wrap
+     * it in functions to make it cleaner anyway */
 
-    let mut user_choice = string::String::new();
-    io::stdin()
-        .read_line(&mut user_choice)
-        .expect("Failed to read from stdout!");
+    fn ask_for_deletion(path: &str) {
+        println!("Delete \"{}\"? [y/n]", path);
+        let mut user_choice = string::String::new();
+        io::stdin()
+            .read_line(&mut user_choice)
+            .expect("Failed to read from stdout");
 
-    if user_choice.to_lowercase().starts_with("y") {
-        fs::remove_file(file_path).expect("I/O Error!");
-        println!("{}\" deleted!", file_path);
+        if user_choice.to_lowercase().starts_with("y") {
+            fs::remove_file(path).expect("I/O Error!");
+        }
+
+        println!("Done");
     }
+
+    fn delete_no_interactive(path: &str) {
+        fs::remove_file(path).expect("I/O Error!");
+        println!("Done!");
+    }
+
+    match arguments.value_of("non-interactive").unwrap() {
+        "keep" => println!("Done!"),
+        "delete" | "del" => delete_no_interactive(file_path),
+        _ => ask_for_deletion(file_path),
+    }
+
 }
