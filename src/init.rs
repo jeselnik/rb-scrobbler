@@ -34,6 +34,7 @@ pub fn app_info() -> clap::App<'static, 'static> {
                   keeps the log file")
             .required(false)
             .takes_value(false)
+            .default_value("true")
         )
         .arg(
             Arg::with_name("delete")
@@ -44,6 +45,7 @@ pub fn app_info() -> clap::App<'static, 'static> {
                   deletes the log file")
             .required(false)
             .takes_value(false)
+            .default_value("true")
         )
         .subcommand(
             SubCommand::with_name("auth")
