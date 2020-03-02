@@ -25,6 +25,26 @@ pub fn app_info() -> clap::App<'static, 'static> {
                 .takes_value(true)
                 .default_value("0"),
         )
+        .arg(
+            Arg::with_name("keep")
+            .short("k")
+            .long("keep")
+            .value_name("KEEP")
+            .help("Parameter for non interactive scrobbling which
+                  keeps the log file")
+            .required(false)
+            .takes_value(false)
+        )
+        .arg(
+            Arg::with_name("delete")
+            .short("d")
+            .long("delete")
+            .value_name("DELETE")
+            .help("Paramater for non interactive scrobbling which
+                  deletes the log file")
+            .required(false)
+            .takes_value(false)
+        )
         .subcommand(
             SubCommand::with_name("auth")
                 .about("Authenticate with last.fm (only required once)")
