@@ -72,7 +72,7 @@ fn main() {
             fs::remove_file(path).expect("I/O Error!");
         }
 
-        println!("Done");
+        println!("Done!");
     }
 
     fn delete_no_interactive(path: &str) {
