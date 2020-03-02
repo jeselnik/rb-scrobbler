@@ -34,7 +34,7 @@ pub fn app_info() -> clap::App<'static, 'static> {
                   with a preset choice")
             .required(false)
             .takes_value(true)
-            .default_value("keep")
+            .default_value("")
         )
         .subcommand(
             SubCommand::with_name("auth")
