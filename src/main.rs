@@ -57,7 +57,7 @@ fn main() {
         }
     }
 
-    /* Can't find a way for multi line in match 
+    /* Can't find a way for multi line in match
      * I could be overlooking something but wrap
      * it in functions to make it cleaner anyway */
 
@@ -85,5 +85,4 @@ fn main() {
         "delete" | "del" => delete_no_interactive(file_path),
         _ => ask_for_deletion(file_path),
     }
-
 }

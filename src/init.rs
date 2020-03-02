@@ -27,14 +27,16 @@ pub fn app_info() -> clap::App<'static, 'static> {
         )
         .arg(
             Arg::with_name("non-interactive")
-            .short("n")
-            .long("non-interactive")
-            .value_name("NON-INTERACTIVE")
-            .help("Skip the delete question during runtime
-                  with a preset choice")
-            .required(false)
-            .takes_value(true)
-            .default_value("")
+                .short("n")
+                .long("non-interactive")
+                .value_name("NON-INTERACTIVE")
+                .help(
+                    "Skip the delete question during runtime
+                  with a preset choice",
+                )
+                .required(false)
+                .takes_value(true)
+                .default_value(""),
         )
         .subcommand(
             SubCommand::with_name("auth")
