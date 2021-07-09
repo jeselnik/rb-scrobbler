@@ -11,13 +11,14 @@ import (
 )
 
 const (
-	AUDIOSCROBBLER_HEADER = "#AUDIOSCROBBLER/"
-	LISTENED              = "\tL\t"
-	SEPARATOR             = "\t"
-	ARTIST_INDEX          = 0
-	ALBUM_INDEX           = 1
-	TITLE_INDEX           = 2
-	TIMESTAMP_INDEX       = 6
+	AUDIOSCROBBLER_HEADER  = "#AUDIOSCROBBLER/"
+	LISTENED               = "\tL\t"
+	SEPARATOR              = "\t"
+	FIRST_TRACK_LINE_INDEX = 3
+	ARTIST_INDEX           = 0
+	ALBUM_INDEX            = 1
+	TITLE_INDEX            = 2
+	TIMESTAMP_INDEX        = 6
 )
 
 func importLog(path *string) ([]string, error) {
@@ -48,5 +49,5 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(scrobblerLog[0])
+	fmt.Println(scrobblerLog[FIRST_TRACK_LINE_INDEX])
 }
