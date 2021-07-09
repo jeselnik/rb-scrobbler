@@ -12,6 +12,12 @@ import (
 
 const (
 	AUDIOSCROBBLER_HEADER = "#AUDIOSCROBBLER/"
+	LISTENED              = "\tL\t"
+	SEPARATOR             = "\t"
+	ARTIST_INDEX          = 0
+	ALBUM_INDEX           = 1
+	TITLE_INDEX           = 2
+	TIMESTAMP_INDEX       = 6
 )
 
 func importLog(path *string) ([]string, error) {
