@@ -21,6 +21,13 @@ const (
 	TIMESTAMP_INDEX        = 6
 )
 
+type Track struct {
+	artist    string
+	album     string
+	title     string
+	timestamp uint
+}
+
 func importLog(path *string) ([]string, error) {
 	logFile, err := os.Open(*path)
 	if err != nil {
