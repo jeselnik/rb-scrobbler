@@ -76,6 +76,8 @@ func main() {
 
 	var tracks []Track
 	for i := FIRST_TRACK_LINE_INDEX; i < len(scrobblerLog)-1; i++ {
-		tracks = append(tracks, logLineToTrack(scrobblerLog[i]))
+		if strings.Contains(scrobblerLog[i], LISTENED) {
+			tracks = append(tracks, logLineToTrack(scrobblerLog[i]))
+		}
 	}
 }
