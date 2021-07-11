@@ -24,13 +24,15 @@ const (
 func importLog(path *string) ([]string, error) {
 	logFile, err := os.Open(*path)
 	if err != nil {
-		log.Fatal(err)
+		var emptySlice []string
+		return emptySlice, err
 	}
 	defer logFile.Close()
 
 	logInBytes, err := ioutil.ReadAll(logFile)
 	if err != nil {
-		log.Fatal(err)
+		var emptySlice []string
+		return emptySlice, err
 	}
 
 	logAsLines := strings.Split(string(logInBytes), "\n")
