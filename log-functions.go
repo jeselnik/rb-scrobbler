@@ -30,7 +30,7 @@ func importLog(path *string) ([]string, error) {
 	}
 }
 
-func logLineToTrack(line string, offset string) Track {
+func logLineToTrack(line, offset string) Track {
 	splitLine := strings.Split(line, SEPARATOR)
 	var timestamp string
 
@@ -50,7 +50,7 @@ func logLineToTrack(line string, offset string) Track {
 	return track
 }
 
-func convertTimeStamp(timestamp string, offset string) string {
+func convertTimeStamp(timestamp, offset string) string {
 	timestampInt, err := strconv.ParseInt(timestamp, 10, 64)
 	if err != nil {
 		log.Fatal(err)
