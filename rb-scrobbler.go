@@ -19,7 +19,12 @@ func main() {
 	logPath := flag.String("f", "", "Path to .scrobbler.log")
 	offset := flag.String("o", "0h", "Offset from UTC")
 	nonInteractive := flag.String("n", "", "Non Interactive Mode (Delete or Keep log with no user input.)")
+	auth := flag.Bool("auth", false, "First time authentication")
 	flag.Parse()
+
+	if *auth {
+		fmt.Println("Auth stream TODO")
+	}
 
 	if *logPath != "" {
 		scrobblerLog, err := importLog(logPath)
