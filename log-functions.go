@@ -7,6 +7,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func importLog(path *string) ([]string, error) {
@@ -29,11 +30,14 @@ func importLog(path *string) ([]string, error) {
 	}
 }
 
-func logLineToTrack(line string) Track {
+func logLineToTrack(line string, offset string) Track {
 	splitLine := strings.Split(line, SEPARATOR)
-	timestamp, err := strconv.ParseUint(splitLine[TIMESTAMP_INDEX], 10, 64)
-	if err != nil {
-		log.Fatal(err)
+	var timestamp string
+
+	if offset != "0h" {
+		timestamp = convertTimeStamp(splitLine[TIMESTAMP_INDEX], offset)
+	} else {
+		timestamp = splitLine[TIMESTAMP_INDEX]
 	}
 
 	track := Track{
@@ -44,4 +48,21 @@ func logLineToTrack(line string) Track {
 	}
 
 	return track
+}
+
+func convertTimeStamp(timestamp string, offset string) string {
+	timestampInt, err := strconv.ParseInt(timestamp, 10, 64)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	/* 0 = zero milliseconds */
+	trackTime := time.Unix(timestampInt, 0)
+	newOffset, err := time.ParseDuration(offset)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	convertedTime := trackTime.Add(-newOffset)
+	return strconv.FormatInt(convertedTime.Unix(), 10)
 }

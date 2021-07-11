@@ -22,11 +22,12 @@ type Track struct {
 	artist    string
 	album     string
 	title     string
-	timestamp uint64
+	timestamp string
 }
 
 func main() {
 	logPath := flag.String("f", "", "Path to .scrobbler.log")
+	offset := flag.String("o", "0h", "Offset from UTC")
 	flag.Parse()
 
 	scrobblerLog, err := importLog(logPath)
@@ -37,11 +38,11 @@ func main() {
 	var tracks []Track
 	for i := FIRST_TRACK_LINE_INDEX; i < len(scrobblerLog)-1; i++ {
 		if strings.Contains(scrobblerLog[i], LISTENED) {
-			tracks = append(tracks, logLineToTrack(scrobblerLog[i]))
+			tracks = append(tracks, logLineToTrack(scrobblerLog[i], *offset))
 		}
 	}
 
 	for i := 0; i < len(tracks); i++ {
-		fmt.Println(tracks[i].title)
+		fmt.Println(tracks[i].timestamp)
 	}
 }
