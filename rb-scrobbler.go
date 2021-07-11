@@ -29,6 +29,7 @@ type Track struct {
 func main() {
 	logPath := flag.String("f", "", "Path to .scrobbler.log")
 	offset := flag.String("o", "0h", "Offset from UTC")
+	nonInteractive := flag.String("n", "", "Non Interactive Mode (Delete or Keep log with no user input.)")
 	flag.Parse()
 
 	if *logPath != "" {
@@ -44,9 +45,23 @@ func main() {
 			}
 		}
 
-		for i := 0; i < len(tracks); i++ {
-			fmt.Println(tracks[i].timestamp)
+		switch *nonInteractive {
+		case "keep":
+			fmt.Printf("%q kept\n", *logPath)
+
+		case "delete":
+			deletionError := os.Remove(*logPath)
+			if deletionError != nil {
+				fmt.Printf("I/O Error Deleting %q!\n%v\n", *logPath, deletionError)
+				os.Exit(1)
+			} else {
+				fmt.Printf("%q deleted!\n", *logPath)
+			}
+
+		default:
+			fmt.Println("TODO")
 		}
+
 	} else {
 		fmt.Println("File (-f) cannot be empty!")
 		os.Exit(1)
