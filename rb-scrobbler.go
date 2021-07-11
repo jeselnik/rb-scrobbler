@@ -8,17 +8,6 @@ import (
 	"strings"
 )
 
-const (
-	AUDIOSCROBBLER_HEADER  = "#AUDIOSCROBBLER/"
-	LISTENED               = "\tL\t"
-	SEPARATOR              = "\t"
-	FIRST_TRACK_LINE_INDEX = 3
-	ARTIST_INDEX           = 0
-	ALBUM_INDEX            = 1
-	TITLE_INDEX            = 2
-	TIMESTAMP_INDEX        = 6
-)
-
 type Track struct {
 	artist    string
 	album     string
