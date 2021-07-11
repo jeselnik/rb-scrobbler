@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -78,4 +79,14 @@ func convertTimeStamp(timestamp, offset string) string {
 
 	convertedTime := trackTime.Add(-newOffset)
 	return strconv.FormatInt(convertedTime.Unix(), 10)
+}
+
+func deleteLogFile(path *string) {
+	deletionError := os.Remove(*path)
+	if deletionError != nil {
+		fmt.Printf("Error Deleting %q!\n%v\n", *path, deletionError)
+		os.Exit(1)
+	} else {
+		fmt.Printf("%q Deleted!", *path)
+	}
 }
