@@ -44,16 +44,10 @@ func main() {
 			fmt.Printf("%q kept\n", *logPath)
 
 		case "delete":
-			deletionError := os.Remove(*logPath)
-			if deletionError != nil {
-				fmt.Printf("I/O Error Deleting %q!\n%v\n", *logPath, deletionError)
-				os.Exit(1)
-			} else {
-				fmt.Printf("%q deleted!\n", *logPath)
-			}
+			deleteLogFile(logPath)
 
 		default:
-			fmt.Println("TODO")
+			fmt.Printf("Delete %q? [y/n] ", *logPath)
 		}
 
 	} else {
