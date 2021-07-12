@@ -38,7 +38,7 @@ func importLog(path *string) ([]string, error) {
 
 	logAsLines := strings.Split(string(logInBytes), "\n")
 	if !strings.Contains(logAsLines[0], AUDIOSCROBBLER_HEADER) {
-		return logAsLines, errors.New("Not a valid .scrobbler.log!")
+		return logAsLines, errors.New("invalid .scrobbler.log")
 	} else {
 		return logAsLines, nil
 	}
