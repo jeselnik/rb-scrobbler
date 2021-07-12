@@ -20,7 +20,7 @@ func getKeyFilePath() string {
 	return filepath.Join(getConfigDir(), "rb-scrobbler.key")
 }
 
-func getSavedToken() string {
+func getSavedKey() string {
 	tokenPath := getKeyFilePath()
 	tokenFile, err := os.Open(tokenPath)
 	if err != nil {

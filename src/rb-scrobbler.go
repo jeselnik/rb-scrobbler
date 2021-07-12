@@ -40,7 +40,10 @@ func main() {
 		reader := bufio.NewReader(os.Stdin)
 		_, _ = reader.ReadString('\n')
 
-		os.WriteFile(getKeyFilePath(), []byte(token), os.ModePerm)
+		api.LoginWithToken(token)
+		sessionKey := api.GetSessionKey()
+
+		os.WriteFile(getKeyFilePath(), []byte(sessionKey), os.ModePerm)
 	}
 
 	if *logPath != "" {
@@ -56,10 +59,7 @@ func main() {
 			}
 		}
 
-		loginErr := api.LoginWithToken(getSavedToken())
-		if loginErr != nil {
-			log.Fatal(loginErr)
-		}
+		api.SetSession(getSavedKey())
 
 		for _, track := range tracks {
 			p := lastfm.P{"artist": track.artist, "album": track.album, "track": track.title, "timestamp": track.timestamp}
