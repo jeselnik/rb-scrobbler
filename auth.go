@@ -14,3 +14,7 @@ func getConfigDir() string {
 
 	return filepath.Join(dir, "rb-scrobbler")
 }
+
+func getKeyFilePath() string {
+	return filepath.Join(getConfigDir(), "rb-scrobbler.key")
+}
