@@ -1,6 +1,7 @@
 EXECUTABLE=rb-scrobbler
 
 build:
-	GOOS=linux
-	GOARCH=amd64
 	go build -o ${EXECUTABLE} *.go
+
+get:
+	go get github.com/shkh/lastfm-go/lastfm
