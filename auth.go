@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -17,4 +18,19 @@ func getConfigDir() string {
 
 func getKeyFilePath() string {
 	return filepath.Join(getConfigDir(), "rb-scrobbler.key")
+}
+
+func getSavedToken() string {
+	tokenPath := getKeyFilePath()
+	tokenFile, err := os.Open(tokenPath)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	tokenInBytes, err := ioutil.ReadAll(tokenFile)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return string(tokenInBytes)
 }
