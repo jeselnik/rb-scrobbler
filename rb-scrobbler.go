@@ -7,6 +7,8 @@ import (
 	"log"
 	"os"
 	"strings"
+
+	"github.com/shkh/lastfm-go/lastfm"
 )
 
 type Track struct {
@@ -23,8 +25,22 @@ func main() {
 	auth := flag.Bool("auth", false, "First time authentication")
 	flag.Parse()
 
+	api := lastfm.New(API_KEY, API_SECRET)
+
 	if *auth {
-		fmt.Println("Auth stream TODO")
+		err := os.Mkdir(getConfigDir(), os.ModePerm)
+		if err != nil {
+			log.Fatal(err)
+		}
+		token, _ := api.GetToken()
+
+		authURL := api.GetAuthTokenUrl(token)
+
+		fmt.Printf("Go to %q, allow access and press ENTER\n", authURL)
+		reader := bufio.NewReader(os.Stdin)
+		_, _ = reader.ReadString('\n')
+
+		os.WriteFile(getKeyFilePath(), []byte(token), os.ModePerm)
 	}
 
 	if *logPath != "" {
