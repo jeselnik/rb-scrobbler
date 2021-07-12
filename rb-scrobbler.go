@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"flag"
 	"fmt"
 	"log"
@@ -47,7 +48,18 @@ func main() {
 			deleteLogFile(logPath)
 
 		default:
+			reader := bufio.NewReader(os.Stdin)
+			var input string
 			fmt.Printf("Delete %q? [y/n] ", *logPath)
+			input, err := reader.ReadString('\n')
+			fmt.Print("\n")
+			if err != nil {
+				fmt.Printf("Error reading input! File %q not deleted.\n%v\n", *logPath, err)
+			} else if strings.ContainsAny(input, "y") || strings.ContainsAny(input, "Y") {
+				deleteLogFile(logPath)
+			} else {
+				fmt.Printf("%q kept\n", *logPath)
+			}
 		}
 
 	} else {
