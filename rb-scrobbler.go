@@ -56,6 +56,22 @@ func main() {
 			}
 		}
 
+		loginErr := api.LoginWithToken(getSavedToken())
+		if loginErr != nil {
+			log.Fatal(loginErr)
+		}
+
+		for _, track := range tracks {
+			p := lastfm.P{"artist": track.artist, "album": track.album, "track": track.title, "timestamp": track.timestamp}
+
+			_, err := api.Track.Scrobble(p)
+			if err != nil {
+				fmt.Printf("[FAIL] %s - %s\n", track.artist, track.title)
+			} else {
+				fmt.Printf("[OK] %s - %s\n", track.artist, track.title)
+			}
+		}
+
 		switch *nonInteractive {
 		case "keep":
 			fmt.Printf("%q kept\n", *logPath)
