@@ -27,24 +27,35 @@ func main() {
 
 	api := lastfm.New(API_KEY, API_SECRET)
 
+	/* First time Authentication */
 	if *auth {
+		/* https://www.last.fm/api/desktopauth */
+
+		/* Create folder to store session key */
 		err := os.Mkdir(getConfigDir(), os.ModePerm)
 		if err != nil {
 			log.Fatal(err)
 		}
+
+		/* "Step 2" */
 		token, _ := api.GetToken()
 
 		authURL := api.GetAuthTokenUrl(token)
 
+		/* "Step 3" */
 		fmt.Printf("Go to %q, allow access and press ENTER\n", authURL)
 		reader := bufio.NewReader(os.Stdin)
 		_, _ = reader.ReadString('\n')
 
+		/* "Step 4" */
 		api.LoginWithToken(token)
 		sessionKey := api.GetSessionKey()
 
+		/* Save session key in config dir/rb-scrobbler */
 		os.WriteFile(getKeyFilePath(), []byte(sessionKey), os.ModePerm)
 	}
+
+	/* When given a file, start executing here */
 
 	if *logPath != "" {
 		scrobblerLog, err := importLog(logPath)
@@ -53,12 +64,15 @@ func main() {
 		}
 
 		var tracks []Track
+		/* length -1 since you go out of bounds otherwise. Only iterate from where trakcs
+		actually show up */
 		for i := FIRST_TRACK_LINE_INDEX; i < len(scrobblerLog)-1; i++ {
 			if strings.Contains(scrobblerLog[i], LISTENED) {
 				tracks = append(tracks, logLineToTrack(scrobblerLog[i], *offset))
 			}
 		}
 
+		/* Login here, after tracks have been parsed and are ready to send */
 		api.SetSession(getSavedKey())
 
 		for _, track := range tracks {
@@ -71,6 +85,8 @@ func main() {
 				fmt.Printf("[OK] %s - %s\n", track.artist, track.title)
 			}
 		}
+
+		/* Handling of file (manual/non interactive delete/keep) */
 
 		switch *nonInteractive {
 		case "keep":

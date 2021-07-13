@@ -1,3 +1,6 @@
+/* This set of functions deals with getting and saving the
+session key in a cross OS manner */
+
 package main
 
 import (

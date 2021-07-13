@@ -22,12 +22,18 @@ const (
 	TIMESTAMP_INDEX        = 6
 )
 
+/* Take a path to a file and return a representation of that file in a
+string slice where every line is a value */
 func importLog(path *string) ([]string, error) {
 	logFile, err := os.Open(*path)
 	if err != nil {
 		var emptySlice []string
 		return emptySlice, err
 	}
+
+	/* It's important to not log.Fatal() or os.Exit() within this function
+	as the following statement will not execute and "let go" of the given
+	file */
 	defer logFile.Close()
 
 	logInBytes, err := ioutil.ReadAll(logFile)
@@ -37,6 +43,7 @@ func importLog(path *string) ([]string, error) {
 	}
 
 	logAsLines := strings.Split(string(logInBytes), "\n")
+	/* Ensure that the file is actually an audioscrobbler log */
 	if !strings.Contains(logAsLines[0], AUDIOSCROBBLER_HEADER) {
 		return logAsLines, errors.New("invalid .scrobbler.log")
 	} else {
@@ -44,10 +51,12 @@ func importLog(path *string) ([]string, error) {
 	}
 }
 
+/* Take a string, split it, convert time if needed and return a track */
 func logLineToTrack(line, offset string) Track {
 	splitLine := strings.Split(line, SEPARATOR)
 	var timestamp string
 
+	/* Time conversion - the API wants it in UTC timezone */
 	if offset != "0h" {
 		timestamp = convertTimeStamp(splitLine[TIMESTAMP_INDEX], offset)
 	} else {
@@ -64,19 +73,29 @@ func logLineToTrack(line, offset string) Track {
 	return track
 }
 
+/* Convert back/to UTC from localtime */
 func convertTimeStamp(timestamp, offset string) string {
+	/* Log stores it in unix epoch format. Convert to an int
+	so it can be manipulated with the time package */
 	timestampInt, err := strconv.ParseInt(timestamp, 10, 64)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	/* 0 = zero milliseconds */
+	/* Convert the epoch into a Time type for conversion.
+	The 0 stands for 0 milliseconds since epoch which isn't
+	needed */
 	trackTime := time.Unix(timestampInt, 0)
+
+	/* Take the offset flag and convert it into the duration
+	which will be added/subtracted */
 	newOffset, err := time.ParseDuration(offset)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	/* The duration is negative so that entries behind UTC are
+	brought forward while entries ahead are brought back */
 	convertedTime := trackTime.Add(-newOffset)
 	return strconv.FormatInt(convertedTime.Unix(), 10)
 }
