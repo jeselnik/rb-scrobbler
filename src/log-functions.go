@@ -52,9 +52,9 @@ func importLog(path *string) ([]string, error) {
 /* Take a string, split it, convert time if needed and return a track */
 func logLineToTrack(line, offset string) Track {
 	splitLine := strings.Split(line, SEPARATOR)
-	var timestamp string
 
 	/* Time conversion - the API wants it in UTC timezone */
+	var timestamp string
 	if offset != "0h" {
 		timestamp = convertTimeStamp(splitLine[TIMESTAMP_INDEX], offset)
 	} else {
