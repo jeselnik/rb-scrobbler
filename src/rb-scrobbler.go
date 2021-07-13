@@ -20,9 +20,9 @@ type Track struct {
 
 func main() {
 	logPath := flag.String("f", "", "Path to .scrobbler.log")
-	offset := flag.String("o", "0h", "Offset from UTC")
-	nonInteractive := flag.String("n", "", "Non Interactive Mode (Delete or Keep log with no user input.)")
-	auth := flag.Bool("auth", false, "First time authentication")
+	offset := flag.String("o", "0h", "Time difference from UTC (format +10h or -10.5h")
+	nonInteractive := flag.String("n", "", "Non Interactive Mode: Automatically (\"keep\" or \"delete\") at end of program")
+	auth := flag.Bool("auth", false, "First Time Authentication")
 	flag.Parse()
 
 	api := lastfm.New(API_KEY, API_SECRET)
