@@ -48,7 +48,7 @@ func main() {
 		/* "Step 3" */
 		fmt.Printf("Go to %q, allow access and press ENTER\n", authURL)
 		reader := bufio.NewReader(os.Stdin)
-		_, _ = reader.ReadString('\n')
+		reader.ReadString('\n')
 
 		/* "Step 4" */
 		loginErr := api.LoginWithToken(token)
