@@ -23,17 +23,18 @@ func getKeyFilePath() string {
 	return filepath.Join(getConfigDir(), "rb-scrobbler.key")
 }
 
+/* Open saved key from disk */
 func getSavedKey() string {
-	tokenPath := getKeyFilePath()
-	tokenFile, err := os.Open(tokenPath)
+	keyPath := getKeyFilePath()
+	keyFile, err := os.Open(keyPath)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	tokenInBytes, err := ioutil.ReadAll(tokenFile)
+	keyInBytes, err := ioutil.ReadAll(keyFile)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	return string(tokenInBytes)
+	return string(keyInBytes)
 }
