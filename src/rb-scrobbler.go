@@ -38,7 +38,10 @@ func main() {
 		}
 
 		/* "Step 2" */
-		token, _ := api.GetToken()
+		token, err := api.GetToken()
+		if err != nil {
+			log.Fatal(err)
+		}
 
 		authURL := api.GetAuthTokenUrl(token)
 
@@ -48,11 +51,15 @@ func main() {
 		_, _ = reader.ReadString('\n')
 
 		/* "Step 4" */
-		api.LoginWithToken(token)
-		sessionKey := api.GetSessionKey()
+		loginErr := api.LoginWithToken(token)
+		if loginErr == nil {
+			sessionKey := api.GetSessionKey()
+			/* Save session key in config dir/rb-scrobbler */
+			os.WriteFile(getKeyFilePath(), []byte(sessionKey), os.ModePerm)
+		} else {
+			log.Fatal(loginErr)
+		}
 
-		/* Save session key in config dir/rb-scrobbler */
-		os.WriteFile(getKeyFilePath(), []byte(sessionKey), os.ModePerm)
 	}
 
 	/* When given a file, start executing here */
