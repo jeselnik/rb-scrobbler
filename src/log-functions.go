@@ -27,8 +27,7 @@ string slice where every line is a value */
 func importLog(path *string) ([]string, error) {
 	logFile, err := os.Open(*path)
 	if err != nil {
-		var emptySlice []string
-		return emptySlice, err
+		return []string{}, err
 	}
 
 	/* It's important to not log.Fatal() or os.Exit() within this function
@@ -38,14 +37,13 @@ func importLog(path *string) ([]string, error) {
 
 	logInBytes, err := ioutil.ReadAll(logFile)
 	if err != nil {
-		var emptySlice []string
-		return emptySlice, err
+		return []string{}, err
 	}
 
 	logAsLines := strings.Split(string(logInBytes), "\n")
 	/* Ensure that the file is actually an audioscrobbler log */
 	if !strings.Contains(logAsLines[0], AUDIOSCROBBLER_HEADER) {
-		return logAsLines, errors.New("invalid .scrobbler.log")
+		return []string{}, errors.New("invalid .scrobbler.log")
 	} else {
 		return logAsLines, nil
 	}
