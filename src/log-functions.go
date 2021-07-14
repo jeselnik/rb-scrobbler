@@ -12,14 +12,12 @@ import (
 )
 
 const (
-	AUDIOSCROBBLER_HEADER  = "#AUDIOSCROBBLER/"
-	LISTENED               = "\tL\t"
-	SEPARATOR              = "\t"
-	FIRST_TRACK_LINE_INDEX = 3
-	ARTIST_INDEX           = 0
-	ALBUM_INDEX            = 1
-	TITLE_INDEX            = 2
-	TIMESTAMP_INDEX        = 6
+	AUDIOSCROBBLER_HEADER = "#AUDIOSCROBBLER/"
+	SEPARATOR             = "\t"
+	ARTIST_INDEX          = 0
+	ALBUM_INDEX           = 1
+	TITLE_INDEX           = 2
+	TIMESTAMP_INDEX       = 6
 )
 
 /* Take a path to a file and return a representation of that file in a
