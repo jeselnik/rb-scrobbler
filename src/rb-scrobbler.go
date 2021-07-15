@@ -113,6 +113,13 @@ func main() {
 		case "delete":
 			deleteLogFile(logPath)
 
+		case "delete-on-success":
+			if fails == 0 {
+				deleteLogFile(logPath)
+			} else {
+				fmt.Printf("Scrobble failures: %q not deleted", *logPath)
+			}
+
 		default:
 			reader := bufio.NewReader(os.Stdin)
 			var input string
