@@ -87,16 +87,22 @@ func main() {
 		/* Login here, after tracks have been parsed and are ready to send */
 		api.SetSession(getSavedKey())
 
+		var success uint
+		var fails uint
 		for _, track := range tracks {
 			p := lastfm.P{"artist": track.artist, "album": track.album, "track": track.title, "timestamp": track.timestamp}
 
 			_, err := api.Track.Scrobble(p)
 			if err != nil {
 				fmt.Printf("[FAIL] %s - %s\n", track.artist, track.title)
+				fails++
 			} else {
 				fmt.Printf("[OK] %s - %s\n", track.artist, track.title)
+				success++
 			}
 		}
+
+		fmt.Printf("Finished: %d tracks scrobbled, %d failed, %d total\n", success, fails, len(tracks))
 
 		/* Handling of file (manual/non interactive delete/keep) */
 
