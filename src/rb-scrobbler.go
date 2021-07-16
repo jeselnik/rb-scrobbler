@@ -25,7 +25,7 @@ type Track struct {
 func main() {
 	logPath := flag.String("f", "", "Path to .scrobbler.log")
 	offset := flag.String("o", "0h", "Time difference from UTC (format +10h or -10.5h")
-	nonInteractive := flag.String("n", "", "Non Interactive Mode: Automatically (\"keep\" or \"delete\") at end of program")
+	nonInteractive := flag.String("n", "", "Non Interactive Mode: Automatically (\"keep\", \"delete\" or \"delete-on-success\") at end of program")
 	auth := flag.Bool("auth", false, "First Time Authentication")
 	flag.Parse()
 
