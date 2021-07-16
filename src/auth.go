@@ -25,8 +25,7 @@ func getKeyFilePath() string {
 
 /* Open saved key from disk */
 func getSavedKey() string {
-	keyPath := getKeyFilePath()
-	keyFile, err := os.Open(keyPath)
+	keyFile, err := os.Open(getKeyFilePath())
 	if err != nil {
 		log.Fatal(err)
 	}
