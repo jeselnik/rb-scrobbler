@@ -70,13 +70,17 @@ func main() {
 	/* When given a file, start executing here */
 
 	if *logPath != "" {
+
+		var tracks []Track
+		var success uint
+		var fails uint
+
 		scrobblerLog, err := importLog(logPath)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		var tracks []Track
-		/* length -1 since you go out of bounds otherwise. Only iterate from where trakcs
+		/* length -1 since you go out of bounds otherwise. Only iterate from where tracks
 		actually show up */
 		for i := FIRST_TRACK_LINE_INDEX; i < len(scrobblerLog)-1; i++ {
 			if strings.Contains(scrobblerLog[i], LISTENED) {
@@ -87,8 +91,6 @@ func main() {
 		/* Login here, after tracks have been parsed and are ready to send */
 		api.SetSession(getSavedKey())
 
-		var success uint
-		var fails uint
 		for _, track := range tracks {
 			p := lastfm.P{"artist": track.artist, "album": track.album, "track": track.title, "timestamp": track.timestamp}
 
