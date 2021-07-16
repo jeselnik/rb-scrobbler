@@ -123,6 +123,7 @@ func main() {
 				deleteLogFile(logPath)
 			} else {
 				fmt.Printf("Scrobble failures: %q not deleted", *logPath)
+				os.Exit(1)
 			}
 
 		default:
