@@ -14,9 +14,11 @@ import (
 const (
 	AUDIOSCROBBLER_HEADER = "#AUDIOSCROBBLER/"
 	SEPARATOR             = "\t"
+	LISTENED              = "L"
 	ARTIST_INDEX          = 0
 	ALBUM_INDEX           = 1
 	TITLE_INDEX           = 2
+	RATING_INDEX          = 5
 	TIMESTAMP_INDEX       = 6
 )
 
@@ -48,25 +50,35 @@ func importLog(path *string) ([]string, error) {
 }
 
 /* Take a string, split it, convert time if needed and return a track */
-func logLineToTrack(line, offset string) Track {
+func logLineToTrack(line, offset string) (Track, error) {
 	splitLine := strings.Split(line, SEPARATOR)
 
-	/* Time conversion - the API wants it in UTC timezone */
-	var timestamp string
-	if offset != "0h" {
-		timestamp = convertTimeStamp(splitLine[TIMESTAMP_INDEX], offset)
+	/* Check the "RATING" index instead of looking for "\tL\t" in a line,
+	just in case a track or album is named "L". If anything like this exists
+	and was skipped the old method would false positive it as listened
+	and then it'd be submitted */
+
+	if splitLine[RATING_INDEX] == LISTENED {
+		var timestamp string
+		/* Time conversion - the API wants it in UTC timezone */
+		if offset != "0h" {
+			timestamp = convertTimeStamp(splitLine[TIMESTAMP_INDEX], offset)
+		} else {
+			timestamp = splitLine[TIMESTAMP_INDEX]
+		}
+
+		track := Track{
+			artist:    splitLine[ARTIST_INDEX],
+			album:     splitLine[ALBUM_INDEX],
+			title:     splitLine[TITLE_INDEX],
+			timestamp: timestamp,
+		}
+
+		return track, nil
+
 	} else {
-		timestamp = splitLine[TIMESTAMP_INDEX]
+		return Track{}, errors.New("Track was skipped")
 	}
-
-	track := Track{
-		artist:    splitLine[ARTIST_INDEX],
-		album:     splitLine[ALBUM_INDEX],
-		title:     splitLine[TITLE_INDEX],
-		timestamp: timestamp,
-	}
-
-	return track
 }
 
 /* Convert back/to UTC from localtime */
