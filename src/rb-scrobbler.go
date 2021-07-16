@@ -83,6 +83,9 @@ func main() {
 		/* length -1 since you go out of bounds otherwise. Only iterate from where tracks
 		actually show up */
 		for i := FIRST_TRACK_LINE_INDEX; i < len(scrobblerLog)-1; i++ {
+			/* Might want to consider splitting every line and checking the
+			"RATING" index instead in case some obscure album/song is named "L"
+			which would false positive the LISTENED const */
 			if strings.Contains(scrobblerLog[i], LISTENED) {
 				tracks = append(tracks, logLineToTrack(scrobblerLog[i], *offset))
 			}
