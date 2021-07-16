@@ -122,7 +122,7 @@ func main() {
 			if fails == 0 {
 				deleteLogFile(logPath)
 			} else {
-				fmt.Printf("Scrobble failures: %q not deleted", *logPath)
+				fmt.Printf("Scrobble failures: %q not deleted.", *logPath)
 				os.Exit(1)
 			}
 
@@ -137,7 +137,7 @@ func main() {
 			} else if strings.ContainsAny(input, "y") || strings.ContainsAny(input, "Y") {
 				deleteLogFile(logPath)
 			} else {
-				fmt.Printf("%q kept\n", *logPath)
+				fmt.Printf("%q kept.\n", *logPath)
 			}
 		}
 
