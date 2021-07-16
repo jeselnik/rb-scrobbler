@@ -48,22 +48,22 @@ func main() {
 			log.Fatal(err)
 		}
 
-		authURL := api.GetAuthTokenUrl(token)
+		/* Step 3 */
 
-		/* "Step 3" */
+		authURL := api.GetAuthTokenUrl(token)
 		fmt.Printf("Go to %q, allow access and press ENTER\n", authURL)
 		reader := bufio.NewReader(os.Stdin)
 		reader.ReadString('\n')
 
 		/* "Step 4" */
 		loginErr := api.LoginWithToken(token)
-		if loginErr == nil {
-			sessionKey := api.GetSessionKey()
-			/* Save session key in config dir/rb-scrobbler */
-			os.WriteFile(getKeyFilePath(), []byte(sessionKey), os.ModePerm)
-		} else {
+		if loginErr != nil {
 			log.Fatal(loginErr)
 		}
+
+		sessionKey := api.GetSessionKey()
+		/* Save session key in config dir/rb-scrobbler */
+		os.WriteFile(getKeyFilePath(), []byte(sessionKey), os.ModePerm)
 
 	}
 
