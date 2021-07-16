@@ -11,9 +11,7 @@ import (
 	"github.com/shkh/lastfm-go/lastfm"
 )
 
-const (
-	FIRST_TRACK_LINE_INDEX = 3
-)
+const FIRST_TRACK_LINE_INDEX = 3
 
 type Track struct {
 	artist    string
