@@ -107,7 +107,7 @@ func main() {
 			}
 		}
 
-		fmt.Printf("Finished: %d tracks scrobbled, %d failed, %d total\n", success, fails, len(tracks))
+		fmt.Printf("\nFinished: %d tracks scrobbled, %d failed, %d total\n", success, fails, len(tracks))
 
 		/* Handling of file (manual/non interactive delete/keep) */
 
