@@ -80,10 +80,8 @@ func main() {
 		/* length -1 since you go out of bounds otherwise. Only iterate from where tracks
 		actually show up */
 		for i := FIRST_TRACK_LINE_INDEX; i < len(scrobblerLog)-1; i++ {
-			newTrack, err := logLineToTrack(scrobblerLog[i], *offset)
-			/* An "error" in this scenario just means the given track was marked as
-			being skipped. No need for any error handling more complex than this. */
-			if err == nil {
+			newTrack, listened := logLineToTrack(scrobblerLog[i], *offset)
+			if listened == true {
 				tracks = append(tracks, newTrack)
 			}
 		}
