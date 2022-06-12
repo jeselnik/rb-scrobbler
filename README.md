@@ -33,10 +33,11 @@ Which will direct you to a URL that asks you to allow access after which you can
 ### Non-Interactive Mode
 
 If your usecase involves scrobbling with no intervention (like as part of a script) you can use the argument 
--n along with parameters "delete" or "keep" which delete or keep the log file respectively.
+-n along with parameters "delete", "keep" or "delete-on-success" which delete or keep the log file respectively.
+"delete-on-success" only deletes the file if there have been zero scrobbling fails and keeps the file untouched
+otherwise - this is the recommended parameter for no intervention scrobbling.
 
 **A word of warning:** The "delete" option will always delete your log after sending scrobbles, failure or success.
-A parameter which only deletes if there are no failed scrobbles will be coming in a later release.
 
 ### Compilation
 

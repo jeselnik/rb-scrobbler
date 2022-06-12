@@ -50,7 +50,7 @@ func importLog(path *string) ([]string, error) {
 }
 
 /* Take a string, split it, convert time if needed and return a track */
-func logLineToTrack(line, offset string) (Track, error) {
+func logLineToTrack(line, offset string) (Track, bool) {
 	splitLine := strings.Split(line, SEPARATOR)
 
 	/* Check the "RATING" index instead of looking for "\tL\t" in a line,
@@ -74,10 +74,10 @@ func logLineToTrack(line, offset string) (Track, error) {
 			timestamp: timestamp,
 		}
 
-		return track, nil
+		return track, true
 
 	} else {
-		return Track{}, errors.New("Track was skipped")
+		return Track{}, false
 	}
 }
 

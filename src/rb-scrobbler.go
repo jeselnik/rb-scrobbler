@@ -11,9 +11,7 @@ import (
 	"github.com/shkh/lastfm-go/lastfm"
 )
 
-const (
-	FIRST_TRACK_LINE_INDEX = 3
-)
+const FIRST_TRACK_LINE_INDEX = 3
 
 type Track struct {
 	artist    string
@@ -25,7 +23,7 @@ type Track struct {
 func main() {
 	logPath := flag.String("f", "", "Path to .scrobbler.log")
 	offset := flag.String("o", "0h", "Time difference from UTC (format +10h or -10.5h")
-	nonInteractive := flag.String("n", "", "Non Interactive Mode: Automatically (\"keep\" or \"delete\") at end of program")
+	nonInteractive := flag.String("n", "", "Non Interactive Mode: Automatically (\"keep\", \"delete\" or \"delete-on-success\") at end of program")
 	auth := flag.Bool("auth", false, "First Time Authentication")
 	flag.Parse()
 
@@ -82,10 +80,8 @@ func main() {
 		/* length -1 since you go out of bounds otherwise. Only iterate from where tracks
 		actually show up */
 		for i := FIRST_TRACK_LINE_INDEX; i < len(scrobblerLog)-1; i++ {
-			newTrack, err := logLineToTrack(scrobblerLog[i], *offset)
-			/* An "error" in this scenario just means the given track was marked as
-			being skipped. No need for any error handling more complex than this. */
-			if err == nil {
+			newTrack, listened := logLineToTrack(scrobblerLog[i], *offset)
+			if listened == true {
 				tracks = append(tracks, newTrack)
 			}
 		}
