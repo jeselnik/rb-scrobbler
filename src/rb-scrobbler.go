@@ -81,7 +81,7 @@ func main() {
 		actually show up */
 		for i := FIRST_TRACK_LINE_INDEX; i < len(scrobblerLog)-1; i++ {
 			newTrack, listened := logLineToTrack(scrobblerLog[i], *offset)
-			if listened == true {
+			if listened {
 				tracks = append(tracks, newTrack)
 			}
 		}
