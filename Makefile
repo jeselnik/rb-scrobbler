@@ -1,4 +1,4 @@
-.PHONY: build get cross-compile clean
+.PHONY: build get test cross-compile clean
 EXECUTABLE=rb-scrobbler
 
 build:
@@ -6,6 +6,9 @@ build:
 
 get:
 	go get github.com/shkh/lastfm-go/lastfm
+
+test:
+	go test -v src/*.go
 
 cross-compile:
 	GOOS=windows GOARCH=amd64 go build -o build/${EXECUTABLE}-windows.exe src/*.go
