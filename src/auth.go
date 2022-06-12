@@ -24,17 +24,19 @@ func getKeyFilePath() string {
 }
 
 /* Open saved key from disk */
-func getSavedKey() string {
+func getSavedKey() (string, error) {
 	keyPath := getKeyFilePath()
 	keyFile, err := os.Open(keyPath)
+
 	if err != nil {
-		log.Fatal(err)
+		return "", err
 	}
+	defer keyFile.Close()
 
 	keyInBytes, err := ioutil.ReadAll(keyFile)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	return string(keyInBytes)
+	return string(keyInBytes), nil
 }

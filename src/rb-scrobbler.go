@@ -91,7 +91,11 @@ func main() {
 		}
 
 		/* Login here, after tracks have been parsed and are ready to send */
-		api.SetSession(getSavedKey())
+		sessionKey, err := getSavedKey()
+		if err != nil {
+			log.Fatal(err)
+		}
+		api.SetSession(sessionKey)
 
 		for _, track := range tracks {
 			p := lastfm.P{"artist": track.artist, "album": track.album, "track": track.title, "timestamp": track.timestamp}
