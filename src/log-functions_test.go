@@ -20,7 +20,8 @@ func TestLogLineToTrack(t *testing.T) {
 		expectedBool  bool
 	}{
 		{"SkipTrack",
-			"50 Cent	Get Rich Or Die Tryin'	In Da Club	2	179	S	1579643462",
+			"50 Cent	Get Rich Or Die Tryin'	In Da Club	2" +
+				"	179	S	1579643462",
 			ZERO_OFFSET,
 			Track{
 				artist:    "50 Cent",
@@ -29,7 +30,8 @@ func TestLogLineToTrack(t *testing.T) {
 				timestamp: "1579643462"},
 			false},
 		{"TimelessSupport",
-			"CHVRCHES	The Bones of What You Believe	The Mother We Share	1	120	L	0",
+			"CHVRCHES	The Bones of What You Believe	The Mother We Share" +
+				"	1	120	L	0",
 			ZERO_OFFSET,
 			Track{
 				artist:    "CHVRCHES",
@@ -38,7 +40,8 @@ func TestLogLineToTrack(t *testing.T) {
 				timestamp: strconv.FormatInt(time.Now().Unix(), 10)},
 			true},
 		{"LogLineToTrack",
-			"50 Cent	Get Rich Or Die Tryin'	Many Men (Wish Death)	2	179	L	1579643462",
+			"50 Cent	Get Rich Or Die Tryin'	Many Men (Wish Death)" +
+				"	2	179	L	1579643462",
 			ZERO_OFFSET,
 			Track{
 				artist:    "50 Cent",
@@ -59,7 +62,8 @@ func TestLogLineToTrack(t *testing.T) {
 					trackEqual = false
 				} else if !(test.expectedTrack.title == gotTrack.title) {
 					trackEqual = false
-				} else if !(test.expectedTrack.timestamp == gotTrack.timestamp) {
+				} else if !(test.expectedTrack.timestamp ==
+					gotTrack.timestamp) {
 					trackEqual = false
 				}
 
@@ -95,7 +99,8 @@ func TestConvertTimeStamp(t *testing.T) {
 			result := convertTimeStamp(test.timestamp, test.offset)
 
 			if result != test.expected {
-				t.Errorf("Test %q failed. Expected %q, got %q\n", test.name, test.expected, result)
+				t.Errorf("Test %q failed. Expected %q, got %q\n",
+					test.name, test.expected, result)
 			}
 		})
 	}

@@ -151,8 +151,10 @@ func logFileHandling(nonInteractive, logPath *string, fail uint) int {
 		input, err := reader.ReadString('\n')
 		fmt.Print("\n")
 		if err != nil {
-			fmt.Printf("Error reading input! File %q not deleted.\n%v\n", *logPath, err)
-		} else if strings.ContainsAny(input, "y") || strings.ContainsAny(input, "Y") {
+			fmt.Printf("Error reading input! File %q not deleted.\n%v\n",
+				*logPath, err)
+		} else if strings.ContainsAny(input, "y") ||
+			strings.ContainsAny(input, "Y") {
 			deleteLogFile(logPath)
 		} else {
 			fmt.Printf("%q kept.\n", *logPath)

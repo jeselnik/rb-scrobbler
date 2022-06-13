@@ -38,7 +38,8 @@ func (tracks Tracks) scrobble(api *lastfm.Api, colours *bool) (uint, uint) {
 	}
 
 	for _, track := range tracks {
-		p := lastfm.P{"artist": track.artist, "album": track.album, "track": track.title, "timestamp": track.timestamp}
+		p := lastfm.P{"artist": track.artist, "album": track.album,
+			"track": track.title, "timestamp": track.timestamp}
 
 		_, err := api.Track.Scrobble(p)
 		if err != nil {

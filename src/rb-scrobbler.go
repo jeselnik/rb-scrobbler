@@ -14,8 +14,11 @@ const FIRST_TRACK_LINE_INDEX = 3
 
 func main() {
 	logPath := flag.String("f", "", "Path to .scrobbler.log")
-	offset := flag.String("o", "0h", "Time difference from UTC (format +10h or -10.5h")
-	nonInteractive := flag.String("n", "", "Non Interactive Mode: Automatically (\"keep\", \"delete\" or \"delete-on-success\") at end of program")
+	offset := flag.String("o", "0h",
+		"Time difference from UTC (format +10h or -10.5h")
+	nonInteractive := flag.String("n", "",
+		"Non Interactive Mode: Automatically (\"keep\", \"delete\""+
+			"or \"delete-on-success\") at end of program")
 	auth := flag.Bool("auth", false, "First Time Authentication")
 	colours := flag.Bool("nc", true, "No Terminal Colours")
 	flag.Parse()
@@ -64,8 +67,8 @@ func main() {
 		}
 
 		var tracks Tracks
-		/* length -1 since you go out of bounds otherwise. Only iterate from where tracks
-		actually show up */
+		/* length -1 since you go out of bounds otherwise.
+		Only iterate from where tracks actually show up */
 		for i := FIRST_TRACK_LINE_INDEX; i < len(scrobblerLog)-1; i++ {
 			newTrack, listened := logLineToTrack(scrobblerLog[i], *offset)
 			if listened {
@@ -81,7 +84,8 @@ func main() {
 		api.SetSession(sessionKey)
 
 		success, fail := tracks.scrobble(api, colours)
-		fmt.Printf("\nFinished: %d tracks scrobbled, %d failed, %d total\n", success, fail, len(tracks))
+		fmt.Printf("\nFinished: %d tracks scrobbled, %d failed, %d total\n",
+			success, fail, len(tracks))
 
 		/* Handling of file (manual/non interactive delete/keep) */
 		os.Exit(logFileHandling(nonInteractive, logPath, fail))
