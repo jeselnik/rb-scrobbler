@@ -21,6 +21,7 @@ const (
 	TITLE_INDEX           = 2
 	RATING_INDEX          = 5
 	TIMESTAMP_INDEX       = 6
+	TIMESTAMP_NO_RTC      = "0"
 )
 
 /* Take a path to a file and return a representation of that file in a
@@ -58,14 +59,20 @@ func logLineToTrack(line, offset string) (Track, bool) {
 	just in case a track or album is named "L". If anything like this exists
 	and was skipped the old method would false positive it as listened
 	and then it'd be submitted */
-
 	if splitLine[RATING_INDEX] == LISTENED {
-		var timestamp string
+		var timestamp string = splitLine[TIMESTAMP_INDEX]
+
+		/* If user has a player with no Real Time Clock, the log file gives it
+		a timestamp of 0. Last.fm API doesn't accept scrobbles dated that far
+		into the past so in the interests of at least having the tracks sent,
+		date them with current local time */
+		if timestamp == TIMESTAMP_NO_RTC {
+			timestamp = strconv.FormatInt(time.Now().Unix(), 10)
+		}
+
 		/* Time conversion - the API wants it in UTC timezone */
 		if offset != "0h" {
-			timestamp = convertTimeStamp(splitLine[TIMESTAMP_INDEX], offset)
-		} else {
-			timestamp = splitLine[TIMESTAMP_INDEX]
+			timestamp = convertTimeStamp(timestamp, offset)
 		}
 
 		track := Track{
