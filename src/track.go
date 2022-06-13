@@ -9,8 +9,8 @@ import (
 const (
 	SUCCESS_STR          = "[OK] %s - %s\n"
 	FAIL_STR             = "[FAIL] %s - %s\n"
-	SUCCESS_STR_COLOURED = "\u001b[32;1m [OK]\u001b[0m %s - %s\n"
-	FAIL_STR_COLOURED    = "\u001b[31;1m [FAIL]\u001b[0m %s - %s\n"
+	SUCCESS_STR_COLOURED = "\u001b[32;1m[OK]\u001b[0m %s - %s\n"
+	FAIL_STR_COLOURED    = "\u001b[31;1m[FAIL]\u001b[0m %s - %s\n"
 )
 
 type Track struct {

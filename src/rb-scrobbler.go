@@ -39,7 +39,6 @@ func main() {
 		}
 
 		/* Step 3 */
-
 		authURL := api.GetAuthTokenUrl(token)
 		fmt.Printf("Go to %q, allow access and press ENTER\n", authURL)
 		reader := bufio.NewReader(os.Stdin)
@@ -52,22 +51,19 @@ func main() {
 		}
 
 		sessionKey := api.GetSessionKey()
-		/* Save session key in config dir/rb-scrobbler */
+		/* Save session key in $CONFIG/rb-scrobbler */
 		os.WriteFile(getKeyFilePath(), []byte(sessionKey), os.ModePerm)
 
 	}
 
 	/* When given a file, start executing here */
-
 	if *logPath != "" {
-
-		var tracks Tracks
-
 		scrobblerLog, err := importLog(logPath)
 		if err != nil {
 			log.Fatal(err)
 		}
 
+		var tracks Tracks
 		/* length -1 since you go out of bounds otherwise. Only iterate from where tracks
 		actually show up */
 		for i := FIRST_TRACK_LINE_INDEX; i < len(scrobblerLog)-1; i++ {
@@ -85,11 +81,9 @@ func main() {
 		api.SetSession(sessionKey)
 
 		success, fail := tracks.scrobble(api, noColour)
-
 		fmt.Printf("\nFinished: %d tracks scrobbled, %d failed, %d total\n", success, fail, len(tracks))
 
 		/* Handling of file (manual/non interactive delete/keep) */
-
 		os.Exit(logFileHandling(nonInteractive, logPath, fail))
 
 	} else {
