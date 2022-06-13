@@ -22,9 +22,9 @@ type Track struct {
 
 type Tracks []Track
 
-func (tracks Tracks) scrobble(api *lastfm.Api, noColours *bool) (success, fail uint) {
-	success = 0
-	fail = 0
+func (tracks Tracks) scrobble(api *lastfm.Api, noColours *bool) (uint, uint) {
+	var success uint = 0
+	var fail uint = 0
 
 	var successString string
 	var failString string
