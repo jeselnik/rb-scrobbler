@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"errors"
 	"flag"
 	"fmt"
 	"log"
@@ -31,7 +32,7 @@ func main() {
 
 		/* Create folder to store session key */
 		err := os.Mkdir(getConfigDir(), os.ModePerm)
-		if err != nil {
+		if err != nil && !errors.Is(err, os.ErrExist) {
 			log.Fatal(err)
 		}
 
@@ -55,7 +56,20 @@ func main() {
 
 		sessionKey := api.GetSessionKey()
 		/* Save session key in $CONFIG/rb-scrobbler */
-		os.WriteFile(getKeyFilePath(), []byte(sessionKey), os.ModePerm)
+		err = os.WriteFile(getKeyFilePath(), []byte(sessionKey), os.ModePerm)
+		if errors.Is(err, os.ErrExist) {
+			err = os.Remove(getKeyFilePath())
+			if err != nil {
+				log.Fatal(err)
+			}
+			err = os.WriteFile(getKeyFilePath(), []byte(sessionKey),
+				os.ModePerm)
+			if err != nil {
+				log.Fatal(err)
+			}
+		} else if err != nil {
+			log.Fatal(err)
+		}
 
 	}
 
