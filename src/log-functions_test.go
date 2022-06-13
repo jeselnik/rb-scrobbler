@@ -12,7 +12,7 @@ func TestLogLineToTrackSkip(t *testing.T) {
 	_, bool := logLineToTrack(line, ZERO_OFFSET)
 
 	if bool {
-		t.Errorf("logLineToTrack Should Have returned false due to skipped file!")
+		t.Errorf("logLineToTrack Should Have returned false due to skipped file!\n")
 	}
 }
 
@@ -29,7 +29,7 @@ func TestLogLineToTrack(t *testing.T) {
 	gotTrack, result := logLineToTrack(line, ZERO_OFFSET)
 
 	if !result {
-		t.Errorf("Track was listened! logLineToTrack should have returned true")
+		t.Errorf("Track was listened! logLineToTrack should have returned true\n")
 	}
 
 	structEqual := true
