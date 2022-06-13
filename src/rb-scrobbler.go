@@ -13,18 +13,12 @@ import (
 
 const FIRST_TRACK_LINE_INDEX = 3
 
-type Track struct {
-	artist    string
-	album     string
-	title     string
-	timestamp string
-}
-
 func main() {
 	logPath := flag.String("f", "", "Path to .scrobbler.log")
 	offset := flag.String("o", "0h", "Time difference from UTC (format +10h or -10.5h")
 	nonInteractive := flag.String("n", "", "Non Interactive Mode: Automatically (\"keep\", \"delete\" or \"delete-on-success\") at end of program")
 	auth := flag.Bool("auth", false, "First Time Authentication")
+	noColour := flag.Bool("nc", false, "No Terminal Colours")
 	flag.Parse()
 
 	api := lastfm.New(API_KEY, API_SECRET)
@@ -68,9 +62,7 @@ func main() {
 
 	if *logPath != "" {
 
-		var tracks []Track
-		var success uint
-		var fails uint
+		var tracks Tracks
 
 		scrobblerLog, err := importLog(logPath)
 		if err != nil {
@@ -93,20 +85,9 @@ func main() {
 		}
 		api.SetSession(sessionKey)
 
-		for _, track := range tracks {
-			p := lastfm.P{"artist": track.artist, "album": track.album, "track": track.title, "timestamp": track.timestamp}
+		success, fail := tracks.scrobble(api, noColour)
 
-			_, err := api.Track.Scrobble(p)
-			if err != nil {
-				fmt.Printf("[FAIL] %s - %s\n", track.artist, track.title)
-				fails++
-			} else {
-				fmt.Printf("[OK] %s - %s\n", track.artist, track.title)
-				success++
-			}
-		}
-
-		fmt.Printf("\nFinished: %d tracks scrobbled, %d failed, %d total\n", success, fails, len(tracks))
+		fmt.Printf("\nFinished: %d tracks scrobbled, %d failed, %d total\n", success, fail, len(tracks))
 
 		/* Handling of file (manual/non interactive delete/keep) */
 
@@ -118,10 +99,10 @@ func main() {
 			deleteLogFile(logPath)
 
 		case "delete-on-success":
-			if fails == 0 {
+			if fail == 0 {
 				deleteLogFile(logPath)
 			} else {
-				fmt.Printf("Scrobble failures: %q not deleted.", *logPath)
+				fmt.Printf("Scrobble failures: %q not deleted.\n", *logPath)
 				os.Exit(1)
 			}
 
