@@ -2,7 +2,10 @@ package main
 
 import "testing"
 
-const ZERO_OFFSET = "0h"
+const (
+	ZERO_OFFSET    = "0h"
+	TEST_TIMESTAMP = "1579643462"
+)
 
 func TestLogLineToTrackSkip(t *testing.T) {
 	line := "50 Cent	Get Rich Or Die Tryin'	In Da Club	2	179	S	1579643462"
@@ -45,4 +48,28 @@ func TestLogLineToTrack(t *testing.T) {
 		t.Errorf("Track object did not match expected!")
 	}
 
+}
+
+func TestConvertTimeStamp(t *testing.T) {
+	testCases := []struct {
+		name      string
+		timestamp string
+		offset    string
+		expected  string
+	}{
+		{"ForwardFromUTC", TEST_TIMESTAMP, "+10h", "1579607462"},
+		{"ForwardFromUTCLiteral", TEST_TIMESTAMP, "10h", "1579607462"},
+		{"BackFromUTC", TEST_TIMESTAMP, "-10h", "1579679462"},
+		{"ForwardFromUTCHalfHour", TEST_TIMESTAMP, "+0.5h", "1579641662"},
+		{"BackFromUTCHalfHour", TEST_TIMESTAMP, "-0.5h", "1579645262"},
+		{"MinuteInput", TEST_TIMESTAMP, "-30m", "1579645262"},
+	}
+
+	for _, test := range testCases {
+		result := convertTimeStamp(test.timestamp, test.offset)
+
+		if result != test.expected {
+			t.Errorf("Test %q failed. Expected %q, got %q\n", test.name, test.expected, result)
+		}
+	}
 }
