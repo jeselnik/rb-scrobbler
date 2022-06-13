@@ -17,7 +17,7 @@ func main() {
 	offset := flag.String("o", "0h", "Time difference from UTC (format +10h or -10.5h")
 	nonInteractive := flag.String("n", "", "Non Interactive Mode: Automatically (\"keep\", \"delete\" or \"delete-on-success\") at end of program")
 	auth := flag.Bool("auth", false, "First Time Authentication")
-	noColour := flag.Bool("nc", false, "No Terminal Colours")
+	colours := flag.Bool("nc", true, "No Terminal Colours")
 	flag.Parse()
 
 	api := lastfm.New(API_KEY, API_SECRET)
@@ -80,7 +80,7 @@ func main() {
 		}
 		api.SetSession(sessionKey)
 
-		success, fail := tracks.scrobble(api, noColour)
+		success, fail := tracks.scrobble(api, colours)
 		fmt.Printf("\nFinished: %d tracks scrobbled, %d failed, %d total\n", success, fail, len(tracks))
 
 		/* Handling of file (manual/non interactive delete/keep) */
