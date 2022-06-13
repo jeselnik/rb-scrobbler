@@ -11,79 +11,66 @@ const (
 	TEST_TIMESTAMP = "1579643462"
 )
 
-func TestLogLineToTrackSkip(t *testing.T) {
-	line := "50 Cent	Get Rich Or Die Tryin'	In Da Club	2	179	S	1579643462"
-	_, bool := logLineToTrack(line, ZERO_OFFSET)
-
-	if bool {
-		t.Errorf("logLineToTrack Should Have returned false due to skipped file!\n")
-	}
-}
-
 func TestLogLineToTrack(t *testing.T) {
-	expecting := Track{
-		artist:    "50 Cent",
-		album:     "Get Rich Or Die Tryin'",
-		title:     "Many Men (Wish Death)",
-		timestamp: "1579643462",
+	testCases := []struct {
+		name          string
+		input         string
+		offset        string
+		expectedTrack Track
+		expectedBool  bool
+	}{
+		{"SkipTrack",
+			"50 Cent	Get Rich Or Die Tryin'	In Da Club	2	179	S	1579643462",
+			ZERO_OFFSET,
+			Track{
+				artist:    "50 Cent",
+				album:     "Get Rich Or Die Tryin'",
+				title:     "In Da Club",
+				timestamp: "1579643462"},
+			false},
+		{"TimelessSupport",
+			"CHVRCHES	The Bones of What You Believe	The Mother We Share	1	120	L	0",
+			ZERO_OFFSET,
+			Track{
+				artist:    "CHVRCHES",
+				album:     "The Bones of What You Believe",
+				title:     "The Mother We Share",
+				timestamp: strconv.FormatInt(time.Now().Unix(), 10)},
+			true},
+		{"LogLineToTrack",
+			"50 Cent	Get Rich Or Die Tryin'	Many Men (Wish Death)	2	179	L	1579643462",
+			ZERO_OFFSET,
+			Track{
+				artist:    "50 Cent",
+				album:     "Get Rich Or Die Tryin'",
+				title:     "Many Men (Wish Death)",
+				timestamp: "1579643462"},
+			true},
 	}
 
-	line := "50 Cent	Get Rich Or Die Tryin'	Many Men (Wish Death)	2	179	L	1579643462"
+	for _, test := range testCases {
+		t.Run(test.name, func(t *testing.T) {
+			gotTrack, gotBool := logLineToTrack(test.input, test.offset)
+			trackEqual := true
+			if gotBool {
+				if !(test.expectedTrack.artist == gotTrack.artist) {
+					trackEqual = false
+				} else if !(test.expectedTrack.album == gotTrack.album) {
+					trackEqual = false
+				} else if !(test.expectedTrack.title == gotTrack.title) {
+					trackEqual = false
+				} else if !(test.expectedTrack.timestamp == gotTrack.timestamp) {
+					trackEqual = false
+				}
 
-	gotTrack, result := logLineToTrack(line, ZERO_OFFSET)
+				if !trackEqual {
+					t.Errorf("Created track was not equal to expected!\n")
+				}
 
-	if !result {
-		t.Errorf("Track was listened! logLineToTrack should have returned true\n")
-	}
-
-	structEqual := true
-
-	if !(expecting.artist == gotTrack.artist) {
-		structEqual = false
-	} else if !(expecting.album == gotTrack.album) {
-		structEqual = false
-	} else if !(expecting.title == gotTrack.title) {
-		structEqual = false
-	} else if !(expecting.timestamp == gotTrack.timestamp) {
-		structEqual = false
-	}
-
-	if !structEqual {
-		t.Errorf("Track object did not match expected!")
-	}
-
-}
-
-func TestTimelessSupport(t *testing.T) {
-	expecting := Track{
-		artist:    "50 Cent",
-		album:     "Get Rich Or Die Tryin'",
-		title:     "Many Men (Wish Death)",
-		timestamp: strconv.FormatInt(time.Now().Unix(), 10),
-	}
-
-	line := "50 Cent	Get Rich Or Die Tryin'	Many Men (Wish Death)	2	179	L	0"
-
-	gotTrack, result := logLineToTrack(line, ZERO_OFFSET)
-
-	if !result {
-		t.Errorf("Track was listened! logLineToTrack should have returned true\n")
-	}
-
-	structEqual := true
-
-	if !(expecting.artist == gotTrack.artist) {
-		structEqual = false
-	} else if !(expecting.album == gotTrack.album) {
-		structEqual = false
-	} else if !(expecting.title == gotTrack.title) {
-		structEqual = false
-	} else if !(expecting.timestamp == gotTrack.timestamp) {
-		structEqual = false
-	}
-
-	if !structEqual {
-		t.Errorf("Track object did not match expected!")
+			} else if gotBool != test.expectedBool {
+				t.Errorf("Expected %t got %t\n", test.expectedBool, gotBool)
+			}
+		})
 	}
 
 }
@@ -104,10 +91,12 @@ func TestConvertTimeStamp(t *testing.T) {
 	}
 
 	for _, test := range testCases {
-		result := convertTimeStamp(test.timestamp, test.offset)
+		t.Run(test.name, func(t *testing.T) {
+			result := convertTimeStamp(test.timestamp, test.offset)
 
-		if result != test.expected {
-			t.Errorf("Test %q failed. Expected %q, got %q\n", test.name, test.expected, result)
-		}
+			if result != test.expected {
+				t.Errorf("Test %q failed. Expected %q, got %q\n", test.name, test.expected, result)
+			}
+		})
 	}
 }
