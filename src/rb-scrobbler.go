@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strings"
 
 	"github.com/shkh/lastfm-go/lastfm"
 )
@@ -91,35 +90,7 @@ func main() {
 
 		/* Handling of file (manual/non interactive delete/keep) */
 
-		switch *nonInteractive {
-		case "keep":
-			fmt.Printf("%q kept\n", *logPath)
-
-		case "delete":
-			deleteLogFile(logPath)
-
-		case "delete-on-success":
-			if fail == 0 {
-				deleteLogFile(logPath)
-			} else {
-				fmt.Printf("Scrobble failures: %q not deleted.\n", *logPath)
-				os.Exit(1)
-			}
-
-		default:
-			reader := bufio.NewReader(os.Stdin)
-			var input string
-			fmt.Printf("Delete %q? [y/n] ", *logPath)
-			input, err := reader.ReadString('\n')
-			fmt.Print("\n")
-			if err != nil {
-				fmt.Printf("Error reading input! File %q not deleted.\n%v\n", *logPath, err)
-			} else if strings.ContainsAny(input, "y") || strings.ContainsAny(input, "Y") {
-				deleteLogFile(logPath)
-			} else {
-				fmt.Printf("%q kept.\n", *logPath)
-			}
-		}
+		os.Exit(logFileHandling(nonInteractive, logPath, fail))
 
 	} else {
 		fmt.Println("File (-f) cannot be empty!")
