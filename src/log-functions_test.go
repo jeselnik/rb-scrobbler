@@ -1,6 +1,10 @@
 package main
 
-import "testing"
+import (
+	"strconv"
+	"testing"
+	"time"
+)
 
 const (
 	ZERO_OFFSET    = "0h"
@@ -25,6 +29,40 @@ func TestLogLineToTrack(t *testing.T) {
 	}
 
 	line := "50 Cent	Get Rich Or Die Tryin'	Many Men (Wish Death)	2	179	L	1579643462"
+
+	gotTrack, result := logLineToTrack(line, ZERO_OFFSET)
+
+	if !result {
+		t.Errorf("Track was listened! logLineToTrack should have returned true\n")
+	}
+
+	structEqual := true
+
+	if !(expecting.artist == gotTrack.artist) {
+		structEqual = false
+	} else if !(expecting.album == gotTrack.album) {
+		structEqual = false
+	} else if !(expecting.title == gotTrack.title) {
+		structEqual = false
+	} else if !(expecting.timestamp == gotTrack.timestamp) {
+		structEqual = false
+	}
+
+	if !structEqual {
+		t.Errorf("Track object did not match expected!")
+	}
+
+}
+
+func TestTimelessSupport(t *testing.T) {
+	expecting := Track{
+		artist:    "50 Cent",
+		album:     "Get Rich Or Die Tryin'",
+		title:     "Many Men (Wish Death)",
+		timestamp: strconv.FormatInt(time.Now().Unix(), 10),
+	}
+
+	line := "50 Cent	Get Rich Or Die Tryin'	Many Men (Wish Death)	2	179	L	0"
 
 	gotTrack, result := logLineToTrack(line, ZERO_OFFSET)
 
