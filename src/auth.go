@@ -35,7 +35,7 @@ func getSavedKey() (string, error) {
 
 	keyInBytes, err := ioutil.ReadAll(keyFile)
 	if err != nil {
-		log.Fatal(err)
+		return "", err
 	}
 
 	return string(keyInBytes), nil
