@@ -71,6 +71,15 @@ func main() {
 			log.Fatal(err)
 		}
 
+		var userName string
+		getInfo, err := api.User.GetInfo(lastfm.P{})
+		if err != nil {
+			userName = "User"
+		} else {
+			userName = getInfo.Name
+		}
+
+		fmt.Printf("%s authenticated\n", userName)
 	}
 
 	/* When given a file, start executing here */
@@ -104,7 +113,7 @@ func main() {
 		/* Handling of file (manual/non interactive delete/keep) */
 		os.Exit(logFileHandling(nonInteractive, logPath, fail))
 
-	} else {
+	} else if !(*auth) {
 		fmt.Println("File (-f) cannot be empty!")
 		os.Exit(1)
 	}
