@@ -41,8 +41,8 @@ func (tracks Tracks) scrobble(api *lastfm.Api, colours *bool) (uint, uint) {
 		p := lastfm.P{"artist": track.artist, "album": track.album,
 			"track": track.title, "timestamp": track.timestamp}
 
-		_, err := api.Track.Scrobble(p)
-		if err != nil {
+		res, err := api.Track.Scrobble(p)
+		if err != nil || res.Ignored != "0" {
 			fmt.Printf(failString, track.artist, track.title)
 			fail++
 		} else {
