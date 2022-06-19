@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"runtime"
 
 	"github.com/shkh/lastfm-go/lastfm"
 )
@@ -21,8 +22,15 @@ func main() {
 		"Non Interactive Mode: Automatically (\"keep\", \"delete\""+
 			"or \"delete-on-success\") at end of program")
 	auth := flag.Bool("auth", false, "First Time Authentication")
-	colours := flag.Bool("nc", true, "No Terminal Colours")
+	colours := flag.Bool("nc", true,
+		"No Terminal Colours (Default behaviour on Windows)")
 	flag.Parse()
+
+	/* Windows CMD doesn't support esc code colours, default
+	it to false */
+	if runtime.GOOS == "windows" {
+		*colours = false
+	}
 
 	api := lastfm.New(API_KEY, API_SECRET)
 
