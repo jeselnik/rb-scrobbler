@@ -116,14 +116,15 @@ func convertTimeStamp(timestamp, offset string) string {
 	return strconv.FormatInt(convertedTime.Unix(), 10)
 }
 
-func deleteLogFile(path *string) {
+func deleteLogFile(path *string) (exitCode int) {
 	deletionError := os.Remove(*path)
 	if deletionError != nil {
 		fmt.Printf("Error Deleting %q!\n%v\n", *path, deletionError)
-		os.Exit(1)
+		exitCode = 1
 	} else {
 		fmt.Printf("%q Deleted!\n", *path)
 	}
+	return exitCode
 }
 
 func logFileHandling(nonInteractive, logPath *string, fail uint) int {
@@ -141,7 +142,7 @@ func logFileHandling(nonInteractive, logPath *string, fail uint) int {
 			deleteLogFile(logPath)
 		} else {
 			fmt.Printf("Scrobble failures: %q not deleted.\n", *logPath)
-			os.Exit(1)
+			exitCode = 1
 		}
 
 	default:
@@ -153,6 +154,7 @@ func logFileHandling(nonInteractive, logPath *string, fail uint) int {
 		if err != nil {
 			fmt.Printf("Error reading input! File %q not deleted.\n%v\n",
 				*logPath, err)
+			exitCode = 1
 		} else if strings.ContainsAny(input, "y") ||
 			strings.ContainsAny(input, "Y") {
 			deleteLogFile(logPath)
