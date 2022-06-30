@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"strconv"
 	"testing"
 	"time"
@@ -17,7 +18,7 @@ func TestLogLineToTrack(t *testing.T) {
 		input         string
 		offset        string
 		expectedTrack Track
-		expectedBool  bool
+		expectedError error
 	}{
 		{"SkipTrack",
 			"50 Cent	Get Rich Or Die Tryin'	In Da Club	2" +
@@ -28,7 +29,7 @@ func TestLogLineToTrack(t *testing.T) {
 				album:     "Get Rich Or Die Tryin'",
 				title:     "In Da Club",
 				timestamp: "1579643462"},
-			false},
+			ErrTrackSkipped},
 		{"TimelessSupport",
 			"CHVRCHES	The Bones of What You Believe	The Mother We Share" +
 				"	1	120	L	0",
@@ -38,7 +39,7 @@ func TestLogLineToTrack(t *testing.T) {
 				album:     "The Bones of What You Believe",
 				title:     "The Mother We Share",
 				timestamp: strconv.FormatInt(time.Now().Unix(), 10)},
-			true},
+			nil},
 		{"LogLineToTrack",
 			"50 Cent	Get Rich Or Die Tryin'	Many Men (Wish Death)" +
 				"	2	179	L	1579643462",
@@ -48,14 +49,14 @@ func TestLogLineToTrack(t *testing.T) {
 				album:     "Get Rich Or Die Tryin'",
 				title:     "Many Men (Wish Death)",
 				timestamp: "1579643462"},
-			true},
+			nil},
 	}
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-			gotTrack, gotBool := logLineToTrack(test.input, test.offset)
+			gotTrack, gotErr := logLineToTrack(test.input, test.offset)
 			trackEqual := true
-			if gotBool {
+			if gotErr == nil {
 				if !(test.expectedTrack.artist == gotTrack.artist) {
 					trackEqual = false
 				} else if !(test.expectedTrack.album == gotTrack.album) {
@@ -71,8 +72,8 @@ func TestLogLineToTrack(t *testing.T) {
 					t.Errorf("Created track was not equal to expected!\n")
 				}
 
-			} else if gotBool != test.expectedBool {
-				t.Errorf("Expected %t got %t\n", test.expectedBool, gotBool)
+			} else if !errors.Is(gotErr, test.expectedError) {
+				t.Errorf("Expected %t got %t\n", test.expectedError, gotErr)
 			}
 		})
 	}

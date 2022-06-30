@@ -101,8 +101,8 @@ func main() {
 		/* length -1 since you go out of bounds otherwise.
 		Only iterate from where tracks actually show up */
 		for i := FIRST_TRACK_LINE_INDEX; i < len(scrobblerLog)-1; i++ {
-			newTrack, listened := logLineToTrack(scrobblerLog[i], *offset)
-			if listened {
+			newTrack, skipped := logLineToTrack(scrobblerLog[i], *offset)
+			if skipped == nil {
 				tracks = append(tracks, newTrack)
 			}
 		}

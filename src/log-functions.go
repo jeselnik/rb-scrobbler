@@ -15,6 +15,7 @@ import (
 const (
 	AUDIOSCROBBLER_HEADER = "#AUDIOSCROBBLER/"
 	SEPARATOR             = "\t"
+	NEWLINE               = "\n"
 	LISTENED              = "L"
 	ARTIST_INDEX          = 0
 	ALBUM_INDEX           = 1
@@ -23,6 +24,9 @@ const (
 	TIMESTAMP_INDEX       = 6
 	TIMESTAMP_NO_RTC      = "0"
 )
+
+var ErrTrackSkipped = errors.New("track was skipped")
+var ErrInvalidLog = errors.New("invalid .scrobbler.log")
 
 /* Take a path to a file and return a representation of that file in a
 string slice where every line is a value */
@@ -42,17 +46,17 @@ func importLog(path *string) ([]string, error) {
 		return []string{}, err
 	}
 
-	logAsLines := strings.Split(string(logInBytes), "\n")
+	logAsLines := strings.Split(string(logInBytes), NEWLINE)
 	/* Ensure that the file is actually an audioscrobbler log */
 	if !strings.Contains(logAsLines[0], AUDIOSCROBBLER_HEADER) {
-		return []string{}, errors.New("invalid .scrobbler.log")
+		return []string{}, ErrInvalidLog
 	} else {
 		return logAsLines, nil
 	}
 }
 
 /* Take a string, split it, convert time if needed and return a track */
-func logLineToTrack(line, offset string) (Track, bool) {
+func logLineToTrack(line, offset string) (Track, error) {
 	splitLine := strings.Split(line, SEPARATOR)
 
 	/* Check the "RATING" index instead of looking for "\tL\t" in a line,
@@ -82,10 +86,10 @@ func logLineToTrack(line, offset string) (Track, bool) {
 			timestamp: timestamp,
 		}
 
-		return track, true
+		return track, nil
 
 	} else {
-		return Track{}, false
+		return Track{}, ErrTrackSkipped
 	}
 }
 
