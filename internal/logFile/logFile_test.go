@@ -1,10 +1,12 @@
-package main
+package logFile
 
 import (
 	"errors"
 	"strconv"
 	"testing"
 	"time"
+
+	"github.com/Jeselnik/rb-scrobbler/internal/track"
 )
 
 const (
@@ -17,54 +19,54 @@ func TestLogLineToTrack(t *testing.T) {
 		name          string
 		input         string
 		offset        string
-		expectedTrack Track
+		expectedTrack track.Track
 		expectedError error
 	}{
 		{"SkipTrack",
 			"50 Cent	Get Rich Or Die Tryin'	In Da Club	2" +
 				"	179	S	1579643462",
 			ZERO_OFFSET,
-			Track{
-				artist:    "50 Cent",
-				album:     "Get Rich Or Die Tryin'",
-				title:     "In Da Club",
-				timestamp: "1579643462"},
+			track.Track{
+				Artist:    "50 Cent",
+				Album:     "Get Rich Or Die Tryin'",
+				Title:     "In Da Club",
+				Timestamp: "1579643462"},
 			ErrTrackSkipped},
 		{"TimelessSupport",
 			"CHVRCHES	The Bones of What You Believe	The Mother We Share" +
 				"	1	120	L	0",
 			ZERO_OFFSET,
-			Track{
-				artist:    "CHVRCHES",
-				album:     "The Bones of What You Believe",
-				title:     "The Mother We Share",
-				timestamp: strconv.FormatInt(time.Now().Unix(), 10)},
+			track.Track{
+				Artist:    "CHVRCHES",
+				Album:     "The Bones of What You Believe",
+				Title:     "The Mother We Share",
+				Timestamp: strconv.FormatInt(time.Now().Unix(), 10)},
 			nil},
 		{"LogLineToTrack",
 			"50 Cent	Get Rich Or Die Tryin'	Many Men (Wish Death)" +
 				"	2	179	L	1579643462",
 			ZERO_OFFSET,
-			Track{
-				artist:    "50 Cent",
-				album:     "Get Rich Or Die Tryin'",
-				title:     "Many Men (Wish Death)",
-				timestamp: "1579643462"},
+			track.Track{
+				Artist:    "50 Cent",
+				Album:     "Get Rich Or Die Tryin'",
+				Title:     "Many Men (Wish Death)",
+				Timestamp: "1579643462"},
 			nil},
 	}
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-			gotTrack, gotErr := logLineToTrack(test.input, test.offset)
+			gotTrack, gotErr := LineToTrack(test.input, test.offset)
 			trackEqual := true
 			if gotErr == nil {
-				if !(test.expectedTrack.artist == gotTrack.artist) {
+				if !(test.expectedTrack.Artist == gotTrack.Artist) {
 					trackEqual = false
-				} else if !(test.expectedTrack.album == gotTrack.album) {
+				} else if !(test.expectedTrack.Album == gotTrack.Album) {
 					trackEqual = false
-				} else if !(test.expectedTrack.title == gotTrack.title) {
+				} else if !(test.expectedTrack.Title == gotTrack.Title) {
 					trackEqual = false
-				} else if !(test.expectedTrack.timestamp ==
-					gotTrack.timestamp) {
+				} else if !(test.expectedTrack.Timestamp ==
+					gotTrack.Timestamp) {
 					trackEqual = false
 				}
 

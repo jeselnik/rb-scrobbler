@@ -1,4 +1,4 @@
-package main
+package track
 
 import (
 	"fmt"
@@ -14,12 +14,12 @@ const (
 )
 
 type Track struct {
-	artist, album, title, timestamp string
+	Artist, Album, Title, Timestamp string
 }
 
 type Tracks []Track
 
-func (tracks Tracks) scrobble(api *lastfm.Api, colours *bool) (
+func Scrobble(api *lastfm.Api, tracks Tracks, colours *bool) (
 	success, fail uint) {
 
 	var successString, failString string
@@ -33,15 +33,15 @@ func (tracks Tracks) scrobble(api *lastfm.Api, colours *bool) (
 	}
 
 	for _, track := range tracks {
-		p := lastfm.P{"artist": track.artist, "album": track.album,
-			"track": track.title, "timestamp": track.timestamp}
+		p := lastfm.P{"artist": track.Artist, "album": track.Album,
+			"track": track.Title, "timestamp": track.Timestamp}
 
 		res, err := api.Track.Scrobble(p)
 		if err != nil || res.Ignored != "0" {
-			fmt.Printf(failString, track.artist, track.title)
+			fmt.Printf(failString, track.Artist, track.Title)
 			fail++
 		} else {
-			fmt.Printf(successString, track.artist, track.title)
+			fmt.Printf(successString, track.Artist, track.Title)
 			success++
 		}
 	}

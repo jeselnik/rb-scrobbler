@@ -1,4 +1,4 @@
-package main
+package logFile
 
 import (
 	"bufio"
@@ -10,6 +10,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/Jeselnik/rb-scrobbler/internal/track"
 )
 
 const (
@@ -30,7 +32,7 @@ var ErrInvalidLog = errors.New("invalid .scrobbler.log")
 
 /* Take a path to a file and return a representation of that file in a
 string slice where every line is a value */
-func importLog(path *string) ([]string, error) {
+func ImportLog(path *string) ([]string, error) {
 	logFile, err := os.Open(*path)
 	if err != nil {
 		return []string{}, err
@@ -56,7 +58,7 @@ func importLog(path *string) ([]string, error) {
 }
 
 /* Take a string, split it, convert time if needed and return a track */
-func logLineToTrack(line, offset string) (Track, error) {
+func LineToTrack(line, offset string) (track.Track, error) {
 	splitLine := strings.Split(line, SEPARATOR)
 
 	/* Check the "RATING" index instead of looking for "\tL\t" in a line,
@@ -79,17 +81,17 @@ func logLineToTrack(line, offset string) (Track, error) {
 			timestamp = convertTimeStamp(timestamp, offset)
 		}
 
-		track := Track{
-			artist:    splitLine[ARTIST_INDEX],
-			album:     splitLine[ALBUM_INDEX],
-			title:     splitLine[TITLE_INDEX],
-			timestamp: timestamp,
+		track := track.Track{
+			Artist:    splitLine[ARTIST_INDEX],
+			Album:     splitLine[ALBUM_INDEX],
+			Title:     splitLine[TITLE_INDEX],
+			Timestamp: timestamp,
 		}
 
 		return track, nil
 
 	} else {
-		return Track{}, ErrTrackSkipped
+		return track.Track{}, ErrTrackSkipped
 	}
 }
 
@@ -131,7 +133,7 @@ func deleteLogFile(path *string) (exitCode int) {
 	return exitCode
 }
 
-func logFileHandling(nonInteractive, logPath *string, fail uint) int {
+func HandleDeletion(nonInteractive, logPath *string, fail uint) int {
 	exitCode := 0
 
 	switch *nonInteractive {

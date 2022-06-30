@@ -9,6 +9,8 @@ import (
 	"os"
 	"runtime"
 
+	"github.com/Jeselnik/rb-scrobbler/internal/logFile"
+	"github.com/Jeselnik/rb-scrobbler/internal/track"
 	"github.com/shkh/lastfm-go/lastfm"
 )
 
@@ -92,16 +94,16 @@ func main() {
 
 	/* When given a file, start executing here */
 	if *logPath != "" {
-		scrobblerLog, err := importLog(logPath)
+		scrobblerLog, err := logFile.ImportLog(logPath)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		var tracks Tracks
+		var tracks track.Tracks
 		/* length -1 since you go out of bounds otherwise.
 		Only iterate from where tracks actually show up */
 		for i := FIRST_TRACK_LINE_INDEX; i < len(scrobblerLog)-1; i++ {
-			newTrack, skipped := logLineToTrack(scrobblerLog[i], *offset)
+			newTrack, skipped := logFile.LineToTrack(scrobblerLog[i], *offset)
 			if skipped == nil {
 				tracks = append(tracks, newTrack)
 			}
@@ -114,12 +116,12 @@ func main() {
 		}
 		api.SetSession(sessionKey)
 
-		success, fail := tracks.scrobble(api, colours)
+		success, fail := track.Scrobble(api, tracks, colours)
 		fmt.Printf("\nFinished: %d tracks scrobbled, %d failed, %d total\n",
 			success, fail, len(tracks))
 
 		/* Handling of file (manual/non interactive delete/keep) */
-		os.Exit(logFileHandling(nonInteractive, logPath, fail))
+		os.Exit(logFile.HandleDeletion(nonInteractive, logPath, fail))
 
 	} else if !(*auth) {
 		fmt.Println("File (-f) cannot be empty!")
