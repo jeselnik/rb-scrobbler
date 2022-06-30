@@ -8,7 +8,7 @@ get:
 	go get github.com/shkh/lastfm-go/lastfm
 
 test:
-	go test -v internal/logFile/*.go
+	go test -v internal/track/*.go
 
 cross-compile:
 	GOOS=windows GOARCH=amd64 go build -o build/${EXECUTABLE}-windows.exe cmd/*.go
