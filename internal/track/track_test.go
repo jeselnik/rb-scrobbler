@@ -1,12 +1,10 @@
-package logFile
+package track
 
 import (
 	"errors"
 	"strconv"
 	"testing"
 	"time"
-
-	"github.com/Jeselnik/rb-scrobbler/internal/track"
 )
 
 const (
@@ -19,14 +17,14 @@ func TestLogLineToTrack(t *testing.T) {
 		name          string
 		input         string
 		offset        string
-		expectedTrack track.Track
+		expectedTrack Track
 		expectedError error
 	}{
 		{"SkipTrack",
 			"50 Cent	Get Rich Or Die Tryin'	In Da Club	2" +
 				"	179	S	1579643462",
 			ZERO_OFFSET,
-			track.Track{
+			Track{
 				Artist:    "50 Cent",
 				Album:     "Get Rich Or Die Tryin'",
 				Title:     "In Da Club",
@@ -36,7 +34,7 @@ func TestLogLineToTrack(t *testing.T) {
 			"CHVRCHES	The Bones of What You Believe	The Mother We Share" +
 				"	1	120	L	0",
 			ZERO_OFFSET,
-			track.Track{
+			Track{
 				Artist:    "CHVRCHES",
 				Album:     "The Bones of What You Believe",
 				Title:     "The Mother We Share",
@@ -46,7 +44,7 @@ func TestLogLineToTrack(t *testing.T) {
 			"50 Cent	Get Rich Or Die Tryin'	Many Men (Wish Death)" +
 				"	2	179	L	1579643462",
 			ZERO_OFFSET,
-			track.Track{
+			Track{
 				Artist:    "50 Cent",
 				Album:     "Get Rich Or Die Tryin'",
 				Title:     "Many Men (Wish Death)",
@@ -56,7 +54,7 @@ func TestLogLineToTrack(t *testing.T) {
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-			gotTrack, gotErr := LineToTrack(test.input, test.offset)
+			gotTrack, gotErr := StringToTrack(test.input, test.offset)
 			trackEqual := true
 			if gotErr == nil {
 				if !(test.expectedTrack.Artist == gotTrack.Artist) {
