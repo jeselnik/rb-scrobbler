@@ -22,9 +22,7 @@ type Tracks []Track
 func (tracks Tracks) scrobble(api *lastfm.Api, colours *bool) (
 	success, fail uint) {
 
-	var (
-		successString, failString string
-	)
+	var successString, failString string
 
 	if *colours {
 		successString = SUCCESS_STR_COLOURED
