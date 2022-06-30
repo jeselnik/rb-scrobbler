@@ -133,7 +133,7 @@ func deleteLogFile(path *string) (exitCode int) {
 	return exitCode
 }
 
-func HandleDeletion(nonInteractive, logPath *string, fail uint) int {
+func HandleFile(nonInteractive, logPath *string, fail uint) int {
 	exitCode := 0
 
 	switch *nonInteractive {

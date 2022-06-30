@@ -121,7 +121,7 @@ func main() {
 			success, fail, len(tracks))
 
 		/* Handling of file (manual/non interactive delete/keep) */
-		os.Exit(logFile.HandleDeletion(nonInteractive, logPath, fail))
+		os.Exit(logFile.HandleFile(nonInteractive, logPath, fail))
 
 	} else if !(*auth) {
 		fmt.Println("File (-f) cannot be empty!")
