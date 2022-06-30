@@ -25,30 +25,30 @@ func TestLogLineToTrack(t *testing.T) {
 				"	179	S	1579643462",
 			ZERO_OFFSET,
 			Track{
-				Artist:    "50 Cent",
-				Album:     "Get Rich Or Die Tryin'",
-				Title:     "In Da Club",
-				Timestamp: "1579643462"},
+				artist:    "50 Cent",
+				album:     "Get Rich Or Die Tryin'",
+				title:     "In Da Club",
+				timestamp: "1579643462"},
 			ErrTrackSkipped},
 		{"TimelessSupport",
 			"CHVRCHES	The Bones of What You Believe	The Mother We Share" +
 				"	1	120	L	0",
 			ZERO_OFFSET,
 			Track{
-				Artist:    "CHVRCHES",
-				Album:     "The Bones of What You Believe",
-				Title:     "The Mother We Share",
-				Timestamp: strconv.FormatInt(time.Now().Unix(), 10)},
+				artist:    "CHVRCHES",
+				album:     "The Bones of What You Believe",
+				title:     "The Mother We Share",
+				timestamp: strconv.FormatInt(time.Now().Unix(), 10)},
 			nil},
 		{"LogLineToTrack",
 			"50 Cent	Get Rich Or Die Tryin'	Many Men (Wish Death)" +
 				"	2	179	L	1579643462",
 			ZERO_OFFSET,
 			Track{
-				Artist:    "50 Cent",
-				Album:     "Get Rich Or Die Tryin'",
-				Title:     "Many Men (Wish Death)",
-				Timestamp: "1579643462"},
+				artist:    "50 Cent",
+				album:     "Get Rich Or Die Tryin'",
+				title:     "Many Men (Wish Death)",
+				timestamp: "1579643462"},
 			nil},
 	}
 
@@ -57,14 +57,14 @@ func TestLogLineToTrack(t *testing.T) {
 			gotTrack, gotErr := StringToTrack(test.input, test.offset)
 			trackEqual := true
 			if gotErr == nil {
-				if !(test.expectedTrack.Artist == gotTrack.Artist) {
+				if !(test.expectedTrack.artist == gotTrack.artist) {
 					trackEqual = false
-				} else if !(test.expectedTrack.Album == gotTrack.Album) {
+				} else if !(test.expectedTrack.album == gotTrack.album) {
 					trackEqual = false
-				} else if !(test.expectedTrack.Title == gotTrack.Title) {
+				} else if !(test.expectedTrack.title == gotTrack.title) {
 					trackEqual = false
-				} else if !(test.expectedTrack.Timestamp ==
-					gotTrack.Timestamp) {
+				} else if !(test.expectedTrack.timestamp ==
+					gotTrack.timestamp) {
 					trackEqual = false
 				}
 

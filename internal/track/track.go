@@ -30,7 +30,7 @@ const (
 var ErrTrackSkipped = errors.New("track was skipped")
 
 type Track struct {
-	Artist, Album, Title, Timestamp string
+	artist, album, title, timestamp string
 }
 
 type Tracks []Track
@@ -60,10 +60,10 @@ func StringToTrack(line, offset string) (Track, error) {
 		}
 
 		track := Track{
-			Artist:    splitLine[ARTIST_INDEX],
-			Album:     splitLine[ALBUM_INDEX],
-			Title:     splitLine[TITLE_INDEX],
-			Timestamp: timestamp,
+			artist:    splitLine[ARTIST_INDEX],
+			album:     splitLine[ALBUM_INDEX],
+			title:     splitLine[TITLE_INDEX],
+			timestamp: timestamp,
 		}
 
 		return track, nil
@@ -114,15 +114,15 @@ func Scrobble(api *lastfm.Api, tracks Tracks, colours *bool) (
 	}
 
 	for _, track := range tracks {
-		p := lastfm.P{"artist": track.Artist, "album": track.Album,
-			"track": track.Title, "timestamp": track.Timestamp}
+		p := lastfm.P{"artist": track.artist, "album": track.album,
+			"track": track.title, "timestamp": track.timestamp}
 
 		res, err := api.Track.Scrobble(p)
 		if err != nil || res.Ignored != "0" {
-			fmt.Printf(failString, track.Artist, track.Title)
+			fmt.Printf(failString, track.artist, track.title)
 			fail++
 		} else {
-			fmt.Printf(successString, track.Artist, track.Title)
+			fmt.Printf(successString, track.artist, track.title)
 			success++
 		}
 	}
