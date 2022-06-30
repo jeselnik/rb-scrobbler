@@ -135,11 +135,11 @@ func logFileHandling(nonInteractive, logPath *string, fail uint) int {
 		fmt.Printf("%q kept\n", *logPath)
 
 	case "delete":
-		deleteLogFile(logPath)
+		exitCode = deleteLogFile(logPath)
 
 	case "delete-on-success":
 		if fail == 0 {
-			deleteLogFile(logPath)
+			exitCode = deleteLogFile(logPath)
 		} else {
 			fmt.Printf("Scrobble failures: %q not deleted.\n", *logPath)
 			exitCode = 1
