@@ -14,10 +14,7 @@ const (
 )
 
 type Track struct {
-	artist    string
-	album     string
-	title     string
-	timestamp string
+	artist, album, title, timestamp string
 }
 
 type Tracks []Track
@@ -26,8 +23,7 @@ func (tracks Tracks) scrobble(api *lastfm.Api, colours *bool) (
 	success, fail uint) {
 
 	var (
-		successString string
-		failString    string
+		successString, failString string
 	)
 
 	if *colours {
