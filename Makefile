@@ -1,5 +1,7 @@
 .PHONY: build get test cross-compile clean
 EXECUTABLE=rb-scrobbler
+API_KEY = ${key}
+API_SECRET = ${secret}
 
 build:
 	go build -o build/${EXECUTABLE} cmd/*.go
@@ -11,7 +13,7 @@ test:
 	go test -v internal/track/*.go
 
 embed-keys:
-	sed -e 's/key/aaa/g' -e 's/secret/bbb/g -i cmd/api-keys.go'	
+	sed -e "s/key/${API_KEY}/g" -e "s/secret/${API_SECRET}/g" -i cmd/api-keys.go
 
 cross-compile:
 	GOOS=windows GOARCH=amd64 go build -o build/${EXECUTABLE}-windows.exe cmd/*.go
