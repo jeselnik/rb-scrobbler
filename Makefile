@@ -10,6 +10,9 @@ get:
 test:
 	go test -v internal/track/*.go
 
+embed-keys:
+	sed -e 's/key/aaa/g' -e 's/secret/bbb/g -i cmd/api-keys.go'	
+
 cross-compile:
 	GOOS=windows GOARCH=amd64 go build -o build/${EXECUTABLE}-windows.exe cmd/*.go
 	GOOS=darwin GOARCH=amd64 go build -o build/${EXECUTABLE}-mac-amd64 cmd/*.go

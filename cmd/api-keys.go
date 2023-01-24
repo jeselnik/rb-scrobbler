@@ -1,6 +1,6 @@
 package main
 
 const (
-	API_KEY    = ""
-	API_SECRET = ""
+	API_KEY    = "key"
+	API_SECRET = "secret"
 )
