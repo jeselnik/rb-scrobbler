@@ -22,8 +22,7 @@ jobs:
         secret: ${{ secrets.API_SECRET }}
       run: make embed-keys
     - name: Build
-      run: make cross-compile
-      run: make build
+      run: make cross-compile && make build
     - name: Keep Artifacts
       uses: actions/upload-artifact@v3
       with:
