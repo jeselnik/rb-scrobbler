@@ -1,13 +1,23 @@
-name: tests
+name: Test & Build
 on:
   push:
     branches:
       - master
+      - dev
 
 jobs:
-  test:
+  deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: env
+      url: https://github.com
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-go@v3
     - run: make test
+    - name: Embed Keys
+      env:
+        key: ${{ secrets.API_KEY }}
+        secret: ${{ secrets.API_SECRET }}
+    - run: make embed-keys
+    - run: make cross-compile
