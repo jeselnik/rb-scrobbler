@@ -23,6 +23,7 @@ jobs:
       run: make embed-keys
     - name: Build
       run: make cross-compile
+      run: make build
     - name: Keep Artifacts
       uses: actions/upload-artifact@v3
       with:
