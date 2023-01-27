@@ -1,4 +1,4 @@
-.PHONY: build get test cross-compile clean
+.PHONY: build get test cross-compile clean embed-keys
 EXECUTABLE=rb-scrobbler
 API_KEY = ${key}
 API_SECRET = ${secret}
