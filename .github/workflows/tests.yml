@@ -6,7 +6,7 @@ on:
       - dev
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     environment:
       name: env
@@ -16,6 +16,16 @@ jobs:
     - uses: actions/setup-go@v3
     - name: Test
       run: make test
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    environment:
+      name: env
+      url: https://github.com
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-go@v3
     - name: Embed Keys
       env:
         key: ${{ secrets.API_KEY }}
