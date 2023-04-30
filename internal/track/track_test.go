@@ -1,7 +1,6 @@
 package track
 
 import (
-	"errors"
 	"strconv"
 	"testing"
 	"time"
@@ -14,11 +13,11 @@ const (
 
 func TestLogLineToTrack(t *testing.T) {
 	testCases := []struct {
-		name          string
-		input         string
-		offset        string
-		expectedTrack Track
-		expectedError error
+		name            string
+		input           string
+		offset          string
+		expectedTrack   Track
+		expectedSkipped bool
 	}{
 		{"SkipTrack",
 			"50 Cent	Get Rich Or Die Tryin'	In Da Club	2" +
@@ -29,7 +28,7 @@ func TestLogLineToTrack(t *testing.T) {
 				album:     "Get Rich Or Die Tryin'",
 				title:     "In Da Club",
 				timestamp: "1579643462"},
-			ErrTrackSkipped},
+			true},
 		{"TimelessSupport",
 			"CHVRCHES	The Bones of What You Believe	The Mother We Share" +
 				"	1	120	L	0",
@@ -39,7 +38,7 @@ func TestLogLineToTrack(t *testing.T) {
 				album:     "The Bones of What You Believe",
 				title:     "The Mother We Share",
 				timestamp: strconv.FormatInt(time.Now().Unix(), 10)},
-			nil},
+			false},
 		{"LogLineToTrack",
 			"50 Cent	Get Rich Or Die Tryin'	Many Men (Wish Death)" +
 				"	2	179	L	1579643462",
@@ -49,22 +48,21 @@ func TestLogLineToTrack(t *testing.T) {
 				album:     "Get Rich Or Die Tryin'",
 				title:     "Many Men (Wish Death)",
 				timestamp: "1579643462"},
-			nil},
+			false},
 	}
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-			gotTrack, gotErr := StringToTrack(test.input, test.offset)
+			gotTrack, gotSkipped := StringToTrack(test.input, test.offset)
 			trackEqual := true
-			if gotErr == nil {
-				if !(test.expectedTrack.artist == gotTrack.artist) {
+			if !gotSkipped {
+				if test.expectedTrack.artist != gotTrack.artist {
 					trackEqual = false
-				} else if !(test.expectedTrack.album == gotTrack.album) {
+				} else if test.expectedTrack.album != gotTrack.album {
 					trackEqual = false
-				} else if !(test.expectedTrack.title == gotTrack.title) {
+				} else if test.expectedTrack.title != gotTrack.title {
 					trackEqual = false
-				} else if !(test.expectedTrack.timestamp ==
-					gotTrack.timestamp) {
+				} else if test.expectedTrack.timestamp != gotTrack.timestamp {
 					trackEqual = false
 				}
 
@@ -72,8 +70,9 @@ func TestLogLineToTrack(t *testing.T) {
 					t.Errorf("Created track was not equal to expected!\n")
 				}
 
-			} else if !errors.Is(gotErr, test.expectedError) {
-				t.Errorf("Expected %t got %t\n", test.expectedError, gotErr)
+			} else if gotSkipped != test.expectedSkipped {
+				t.Errorf("Expected %t got %t\n", test.expectedSkipped,
+					gotSkipped)
 			}
 		})
 	}

@@ -104,7 +104,7 @@ func main() {
 		Only iterate from where tracks actually show up */
 		for i := FIRST_TRACK_LINE_INDEX; i < len(scrobblerLog)-1; i++ {
 			newTrack, skipped := track.StringToTrack(scrobblerLog[i], *offset)
-			if skipped == nil {
+			if !skipped {
 				tracks = append(tracks, newTrack)
 			}
 		}
