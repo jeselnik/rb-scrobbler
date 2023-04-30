@@ -78,8 +78,9 @@ copies **Artist**, **Album**, **Track** & **Timestamp** (and converts it back/fo
 last.fm.
 
 Official documentation on this format is available [here](https://web.archive.org/web/20170107015006/http://www.audioscrobbler.net/wiki/Portable_Player_Logging).
-I haven't implemented the specification perfectly and have just implemented the parts implemented by Rockbox (_i.e_ RB doesn't keep timezone data
-so rb-scrobbler doesn't parse the file looking for it)
+My implementation of the specification differs slightly from the documentation as I decided to ignore the time zone header. My reasoning for this is because
+it only has two values; 'UTC' and 'UNKNOWN'. Parsing for UTC is unnecessary as the default timezone offset is zero and if the player doesn't keep track of
+the offset it's better to let the user decide in case their PC clock differs from their player clock due to changing time zones.
 
 As with everything built on the last.fm API; scrobbles older than two weeks will not propagate on their database despite what the response will tell you.
 
