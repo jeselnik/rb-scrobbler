@@ -2,7 +2,6 @@ package logFile
 
 import (
 	"bufio"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -14,10 +13,22 @@ const (
 	NEWLINE               = "\n"
 )
 
-var ErrInvalidLog = errors.New("invalid .scrobbler.log")
+type ErrInvalidLog struct {
+	message string
+}
 
-/* Take a path to a file and return a representation of that file in a
-string slice where every line is a value */
+func (e ErrInvalidLog) Error() string {
+	return e.message
+}
+
+func newInvalidLogError(msg string) ErrInvalidLog {
+	return ErrInvalidLog{"Invalid .scrobbler.log: " + msg}
+}
+
+/*
+Take a path to a file and return a representation of that file in a
+string slice where every line is a value
+*/
 func ImportLog(path *string) ([]string, error) {
 	logFile, err := os.Open(*path)
 	if err != nil {
@@ -37,7 +48,7 @@ func ImportLog(path *string) ([]string, error) {
 	logAsLines := strings.Split(string(logInBytes), NEWLINE)
 	/* Ensure that the file is actually an audioscrobbler log */
 	if !strings.Contains(logAsLines[0], AUDIOSCROBBLER_HEADER) {
-		return []string{}, ErrInvalidLog
+		return []string{}, newInvalidLogError("Audioscrobbler Header Missing!")
 	} else {
 		return logAsLines, nil
 	}
