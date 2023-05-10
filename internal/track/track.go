@@ -52,7 +52,7 @@ func StringToTrack(line, offset string) (Track, bool) {
 		}
 
 		/* Time conversion - the API wants it in UTC timezone */
-		if offset != "0h" {
+		if offset != "0h" || timestamp != TIMESTAMP_NO_RTC {
 			timestamp = convertTimeStamp(timestamp, offset)
 		}
 
