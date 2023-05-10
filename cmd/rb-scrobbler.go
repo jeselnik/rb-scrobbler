@@ -17,14 +17,19 @@ import (
 const FIRST_TRACK_LINE_INDEX = 3
 
 func main() {
-	logPath := flag.String("f", "", "Path to .scrobbler.log")
-	offset := flag.String("o", "0h",
+	conf, err := openConfigFile()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	logPath := flag.String("f", conf.Path, "Path to .scrobbler.log")
+	offset := flag.String("o", conf.Offset,
 		"Time difference from UTC (format +10h or -10.5h")
-	nonInteractive := flag.String("n", "",
+	nonInteractive := flag.String("n", conf.NonInteractive,
 		"Non Interactive Mode: Automatically (\"keep\", \"delete\""+
 			"or \"delete-on-success\") at end of program")
 	auth := flag.Bool("auth", false, "First Time Authentication")
-	colours := flag.Bool("nc", true,
+	colours := flag.Bool("nc", conf.Colours,
 		"No Terminal Colours (Default behaviour on Windows)")
 	flag.Parse()
 
