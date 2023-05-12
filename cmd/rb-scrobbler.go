@@ -31,8 +31,8 @@ func main() {
 	offset := flag.String("o", conf.Offset,
 		"Time difference from UTC (format +10h or -10.5h")
 	nonInteractive := flag.String("n", conf.NonInteractive,
-		"Non Interactive Mode: Automatically (\"keep\", \"delete\""+
-			"or \"delete-on-success\") at end of program")
+		"Non Interactive Mode: Automatically (\"keep\" or \"delete\""+
+			"(only when successful) at end of program")
 	auth := flag.Bool("auth", false, "First Time Authentication")
 	colours := flag.Bool("nc", conf.Colours,
 		"No Terminal Colours (Default behaviour on Windows)")

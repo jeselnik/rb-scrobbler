@@ -73,9 +73,6 @@ func HandleFile(nonInteractive, logPath *string, fail uint) int {
 		fmt.Printf("%q kept\n", *logPath)
 
 	case "delete":
-		exitCode = deleteLogFile(logPath)
-
-	case "delete-on-success":
 		if fail == 0 {
 			exitCode = deleteLogFile(logPath)
 		} else {
