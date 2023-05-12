@@ -17,6 +17,11 @@ import (
 const FIRST_TRACK_LINE_INDEX = 3
 
 func main() {
+	err := os.Mkdir(getConfigDir(), os.ModePerm)
+	if err != nil && !errors.Is(err, os.ErrExist) {
+		log.Fatal(err)
+	}
+
 	conf, err := openConfigFile()
 	if err != nil {
 		log.Fatal(err)
@@ -44,12 +49,6 @@ func main() {
 	/* First time Authentication */
 	if *auth {
 		/* https://www.last.fm/api/desktopauth */
-
-		/* Create folder to store session key */
-		err := os.Mkdir(getConfigDir(), os.ModePerm)
-		if err != nil && !errors.Is(err, os.ErrExist) {
-			log.Fatal(err)
-		}
 
 		/* "Step 2" */
 		token, err := api.GetToken()

@@ -41,8 +41,10 @@ func openConfigFile() (config, error) {
 	file, err := os.Open(getConfigFileDir())
 
 	if errors.Is(err, os.ErrNotExist) {
-		createDefaultConfig()
-		file, err = os.Open(getConfigFileDir())
+		err = createDefaultConfig()
+		if err == nil {
+			file, err = os.Open(getConfigFileDir())
+		}
 	}
 
 	if err != nil {
