@@ -15,7 +15,7 @@ import (
 	"github.com/shkh/lastfm-go/lastfm"
 )
 
-const REGEX_HEADERS = "(#AUDIOSCROBBLER/|#TZ/|#CLIENT/|#ARTIST #ALBUM)"
+const REGEX_HEADERS = "#(AUDIOSCROBBLER/|TZ/|CLIENT/|ARTIST #ALBUM)"
 
 func main() {
 	logPath := flag.String("f", "", "Path to .scrobbler.log")
