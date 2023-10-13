@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"regexp"
 	"runtime"
 
 	"github.com/Jeselnik/rb-scrobbler/internal/logFile"
@@ -14,7 +15,7 @@ import (
 	"github.com/shkh/lastfm-go/lastfm"
 )
 
-const FIRST_TRACK_LINE_INDEX = 3
+const REGEX_HEADERS = "(#AUDIOSCROBBLER/|#TZ/|#CLIENT/|#ARTIST #ALBUM)"
 
 func main() {
 	logPath := flag.String("f", "", "Path to .scrobbler.log")
@@ -99,13 +100,15 @@ func main() {
 			log.Fatal(err)
 		}
 
+		headers, _ := regexp.Compile(REGEX_HEADERS)
+
 		var tracks track.Tracks
-		/* length -1 since you go out of bounds otherwise.
-		Only iterate from where tracks actually show up */
-		for i := FIRST_TRACK_LINE_INDEX; i < len(scrobblerLog)-1; i++ {
-			newTrack, skipped := track.StringToTrack(scrobblerLog[i], *offset)
-			if skipped == nil {
-				tracks = append(tracks, newTrack)
+		for _, line := range scrobblerLog {
+			if !(headers.MatchString(line)) {
+				newTrack, skipped := track.StringToTrack(line, *offset)
+				if !skipped {
+					tracks = append(tracks, newTrack)
+				}
 			}
 		}
 
