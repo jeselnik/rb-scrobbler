@@ -4,38 +4,31 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"strings"
 )
 
-const (
-	AUDIOSCROBBLER_HEADER = "#AUDIOSCROBBLER/"
-	NEWLINE               = "\n"
-)
+const AUDIOSCROBBLER_HEADER = "#AUDIOSCROBBLER/"
 
 var ErrInvalidLog = errors.New("invalid .scrobbler.log")
 
 /* Take a path to a file and return a representation of that file in a
 string slice where every line is a value */
 func ImportLog(path *string) ([]string, error) {
+	var logAsLines []string
+
 	logFile, err := os.Open(*path)
 	if err != nil {
-		return []string{}, err
+		return logAsLines, err
 	}
 
-	/* It's important to not log.Fatal() or os.Exit() within this function
-	as the following statement will not execute and "let go" of the given
-	file */
 	defer logFile.Close()
 
-	logInBytes, err := ioutil.ReadAll(logFile)
-	if err != nil {
-		return []string{}, err
+	scanner := bufio.NewScanner(logFile)
+	for scanner.Scan() {
+		logAsLines = append(logAsLines, scanner.Text())
 	}
 
-	logAsLines := strings.Split(string(logInBytes), NEWLINE)
-	/* Ensure that the file is actually an audioscrobbler log */
 	if !strings.Contains(logAsLines[0], AUDIOSCROBBLER_HEADER) {
 		return []string{}, ErrInvalidLog
 	} else {
