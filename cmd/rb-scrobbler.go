@@ -105,8 +105,8 @@ func main() {
 		var tracks track.Tracks
 		for _, line := range scrobblerLog {
 			if !(headers.MatchString(line)) {
-				newTrack, skipped := track.StringToTrack(line, *offset)
-				if !skipped {
+				newTrack, listened := track.StringToTrack(line, *offset)
+				if listened {
 					tracks = append(tracks, newTrack)
 				}
 			}

@@ -1,7 +1,6 @@
 package track
 
 import (
-	"errors"
 	"fmt"
 	"log"
 	"strconv"
@@ -27,8 +26,6 @@ const (
 	TIMESTAMP_NO_RTC = "0"
 )
 
-var ErrTrackSkipped = errors.New("track was skipped")
-
 type Track struct {
 	artist, album, title, timestamp string
 }
@@ -36,7 +33,7 @@ type Track struct {
 type Tracks []Track
 
 /* Take a string, split it, convert time if needed and return a track */
-func StringToTrack(line, offset string) (Track, error) {
+func StringToTrack(line, offset string) (track Track, listened bool) {
 	splitLine := strings.Split(line, SEPARATOR)
 
 	/* Check the "RATING" index instead of looking for "\tL\t" in a line,
@@ -66,10 +63,10 @@ func StringToTrack(line, offset string) (Track, error) {
 			timestamp: timestamp,
 		}
 
-		return track, nil
+		return track, true
 
 	} else {
-		return Track{}, ErrTrackSkipped
+		return Track{}, false
 	}
 }
 
