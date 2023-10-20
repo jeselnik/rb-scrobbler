@@ -39,17 +39,17 @@ func StringToTrack(line []string, offset float64) Track {
 	and then it'd be submitted */
 	var timestamp string = line[TIMESTAMP_INDEX]
 
+	/* Time conversion - the API wants it in UTC timezone */
+	if offset != 0 || timestamp == TIMESTAMP_NO_RTC {
+		timestamp = convertTimeStamp(timestamp, offset)
+	}
+
 	/* If user has a player with no Real Time Clock, the log file gives it
 	a timestamp of 0. Last.fm API doesn't accept scrobbles dated that far
 	into the past so in the interests of at least having the tracks sent,
 	date them with current local time */
 	if timestamp == TIMESTAMP_NO_RTC {
 		timestamp = strconv.FormatInt(time.Now().Unix(), 10)
-	}
-
-	/* Time conversion - the API wants it in UTC timezone */
-	if offset != 0 {
-		timestamp = convertTimeStamp(timestamp, offset)
 	}
 
 	track := Track{
