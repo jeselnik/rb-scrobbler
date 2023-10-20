@@ -34,7 +34,7 @@ type Track struct {
 type Tracks []Track
 
 /* Take a string, split it, convert time if needed and return a track */
-func StringToTrack(line []string, offset string) Track {
+func StringToTrack(line []string, offset float64) Track {
 	/* Check the "RATING" index instead of looking for "\tL\t" in a line,
 	just in case a track or album is named "L". If anything like this exists
 	and was skipped the old method would false positive it as listened
@@ -50,7 +50,7 @@ func StringToTrack(line []string, offset string) Track {
 	}
 
 	/* Time conversion - the API wants it in UTC timezone */
-	if offset != "0h" {
+	if offset != 0 {
 		timestamp = convertTimeStamp(timestamp, offset)
 	}
 
@@ -66,30 +66,17 @@ func StringToTrack(line []string, offset string) Track {
 }
 
 /* Convert back/to UTC from localtime */
-func convertTimeStamp(timestamp, offset string) string {
-	/* Log stores it in unix epoch format. Convert to an int
-	so it can be manipulated with the time package */
-	timestampInt, err := strconv.ParseInt(timestamp, 10, 64)
+func convertTimeStamp(timestamp string, offset float64) string {
+	timestampFlt, err := strconv.ParseFloat(timestamp, 64)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	/* Convert the epoch into a Time type for conversion.
-	The 0 stands for 0 milliseconds since epoch which isn't
-	needed */
-	trackTime := time.Unix(timestampInt, 0)
+	offsetInSec := offset * SECONDS_IN_HOUR
 
-	/* Take the offset flag and convert it into the duration
-	which will be added/subtracted */
-	newOffset, err := time.ParseDuration(offset)
-	if err != nil {
-		log.Fatal(err)
-	}
+	converted := timestampFlt + (-offsetInSec)
 
-	/* The duration is negative so that entries behind UTC are
-	brought forward while entries ahead are brought back */
-	convertedTime := trackTime.Add(-newOffset)
-	return strconv.FormatInt(convertedTime.Unix(), 10)
+	return strconv.FormatInt(int64(converted), 10)
 }
 
 func Scrobble(api *lastfm.Api, tracks Tracks, colours *bool) (
