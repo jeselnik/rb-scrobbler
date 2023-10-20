@@ -2,13 +2,16 @@ package main
 
 import (
 	"bufio"
+	"encoding/csv"
 	"errors"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"regexp"
 	"runtime"
+	"strings"
 
 	"github.com/Jeselnik/rb-scrobbler/internal/logFile"
 	"github.com/Jeselnik/rb-scrobbler/internal/track"
@@ -95,21 +98,40 @@ func main() {
 
 	/* When given a file, start executing here */
 	if *logPath != "" {
-		scrobblerLog, err := logFile.ImportLog(logPath)
-		if err != nil {
-			log.Fatal(err)
-		}
+
+		f, _ := os.Open(*logPath)
+		defer f.Close()
+		r := csv.NewReader(f)
+		r.Comma = track.SEPARATOR
 
 		headers, _ := regexp.Compile(REGEX_HEADERS)
 
 		var tracks track.Tracks
-		for _, line := range scrobblerLog {
-			if !(headers.MatchString(line)) {
-				newTrack, listened := track.StringToTrack(line, *offset)
-				if listened {
-					tracks = append(tracks, newTrack)
-				}
+		first := true
+
+		for {
+			line, err := r.Read()
+
+			if err == io.EOF {
+				break
 			}
+
+			if first && !strings.Contains(line[0], logFile.AUDIOSCROBBLER_HEADER) {
+				break
+			}
+
+			first = false
+
+			if headers.MatchString(line[0]) {
+				continue
+			}
+
+			if line[track.RATING_INDEX] != track.LISTENED {
+				continue
+			}
+
+			tracks = append(tracks, track.StringToTrack(line, *offset))
+
 		}
 
 		/* Login here, after tracks have been parsed and are ready to send */
