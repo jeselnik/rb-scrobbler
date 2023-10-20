@@ -15,7 +15,6 @@ const (
 	SUCCESS_STR_COLOURED = "\u001b[32;1m[OK]\u001b[0m %s - %s\n"
 	FAIL_STR_COLOURED    = "\u001b[31;1m[FAIL]\u001b[0m %s - %s\n"
 
-	SEPARATOR        = '\t'
 	LISTENED         = "L"
 	ARTIST_INDEX     = 0
 	ALBUM_INDEX      = 1
@@ -33,7 +32,6 @@ type Track struct {
 
 type Tracks []Track
 
-/* Take a string, split it, convert time if needed and return a track */
 func StringToTrack(line []string, offset float64) Track {
 	/* Check the "RATING" index instead of looking for "\tL\t" in a line,
 	just in case a track or album is named "L". If anything like this exists

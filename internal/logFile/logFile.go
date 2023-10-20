@@ -2,38 +2,66 @@ package logFile
 
 import (
 	"bufio"
+	"encoding/csv"
 	"errors"
 	"fmt"
+	"io"
 	"os"
+	"regexp"
 	"strings"
+
+	"github.com/Jeselnik/rb-scrobbler/internal/track"
 )
 
-const AUDIOSCROBBLER_HEADER = "#AUDIOSCROBBLER/"
+const (
+	AUDIOSCROBBLER_HEADER = "#AUDIOSCROBBLER/"
+	REGEX_HEADERS         = "#(AUDIOSCROBBLER/|TZ/|CLIENT/|ARTIST #ALBUM)"
+	SEPARATOR             = '\t'
+)
 
 var ErrInvalidLog = errors.New("invalid .scrobbler.log")
 
-/* Take a path to a file and return a representation of that file in a
-string slice where every line is a value */
-func ImportLog(path *string) ([]string, error) {
-	var logAsLines []string
+func ImportLog(path *string, offset *float64) (track.Tracks, error) {
+	var logErr error = nil
 
-	logFile, err := os.Open(*path)
-	if err != nil {
-		return logAsLines, err
+	f, _ := os.Open(*path)
+	defer f.Close()
+	r := csv.NewReader(f)
+	r.Comma = SEPARATOR
+
+	headers, _ := regexp.Compile(REGEX_HEADERS)
+
+	var tracks track.Tracks
+	first := true
+
+	for {
+		line, err := r.Read()
+
+		if err == io.EOF {
+			break
+		}
+
+		if first && !strings.Contains(line[0], AUDIOSCROBBLER_HEADER) {
+			logErr = ErrInvalidLog
+			break
+		}
+
+		first = false
+
+		if headers.MatchString(line[0]) {
+			continue
+		}
+
+		if line[track.RATING_INDEX] != track.LISTENED {
+			continue
+		}
+
+		tracks = append(tracks, track.StringToTrack(line, *offset))
+
 	}
 
-	defer logFile.Close()
+	return tracks, logErr
 
-	scanner := bufio.NewScanner(logFile)
-	for scanner.Scan() {
-		logAsLines = append(logAsLines, scanner.Text())
-	}
-
-	if !strings.Contains(logAsLines[0], AUDIOSCROBBLER_HEADER) {
-		return []string{}, ErrInvalidLog
-	} else {
-		return logAsLines, nil
-	}
 }
 
 func deleteLogFile(path *string) (exitCode int) {

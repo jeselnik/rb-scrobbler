@@ -2,23 +2,17 @@ package main
 
 import (
 	"bufio"
-	"encoding/csv"
 	"errors"
 	"flag"
 	"fmt"
-	"io"
 	"log"
 	"os"
-	"regexp"
 	"runtime"
-	"strings"
 
 	"github.com/Jeselnik/rb-scrobbler/internal/logFile"
 	"github.com/Jeselnik/rb-scrobbler/internal/track"
 	"github.com/shkh/lastfm-go/lastfm"
 )
-
-const REGEX_HEADERS = "#(AUDIOSCROBBLER/|TZ/|CLIENT/|ARTIST #ALBUM)"
 
 func main() {
 	logPath := flag.String("f", "", "Path to .scrobbler.log")
@@ -99,39 +93,9 @@ func main() {
 	/* When given a file, start executing here */
 	if *logPath != "" {
 
-		f, _ := os.Open(*logPath)
-		defer f.Close()
-		r := csv.NewReader(f)
-		r.Comma = track.SEPARATOR
-
-		headers, _ := regexp.Compile(REGEX_HEADERS)
-
-		var tracks track.Tracks
-		first := true
-
-		for {
-			line, err := r.Read()
-
-			if err == io.EOF {
-				break
-			}
-
-			if first && !strings.Contains(line[0], logFile.AUDIOSCROBBLER_HEADER) {
-				break
-			}
-
-			first = false
-
-			if headers.MatchString(line[0]) {
-				continue
-			}
-
-			if line[track.RATING_INDEX] != track.LISTENED {
-				continue
-			}
-
-			tracks = append(tracks, track.StringToTrack(line, *offset))
-
+		tracks, err := logFile.ImportLog(logPath, offset)
+		if err != nil {
+			log.Fatal(err)
 		}
 
 		/* Login here, after tracks have been parsed and are ready to send */
