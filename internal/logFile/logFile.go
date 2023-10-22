@@ -22,18 +22,26 @@ const (
 var ErrInvalidLog = errors.New("invalid .scrobbler.log")
 
 func ImportLog(path *string, offset *float64) (track.Tracks, error) {
-	var logErr error = nil
 
-	f, _ := os.Open(*path)
+	var logErr error = nil
+	var tracks track.Tracks
+
+	f, err := os.Open(*path)
+	if err != nil {
+		return tracks, logErr
+	}
 	defer f.Close()
+
 	r := csv.NewReader(f)
 	r.Comma = SEPARATOR
+	r.ReuseRecord = true
 
-	headers, _ := regexp.Compile(REGEX_HEADERS)
+	headers, err := regexp.Compile(REGEX_HEADERS)
+	if err != nil {
+		return tracks, logErr
+	}
 
-	var tracks track.Tracks
 	first := true
-
 	for {
 		line, err := r.Read()
 
