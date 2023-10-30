@@ -31,8 +31,9 @@ func ImportLog(path *string, offset *float64) (track.Tracks, error) {
 		return tracks, logErr
 	}
 	defer f.Close()
+	reader := bufio.NewReader(f)
 
-	r := csv.NewReader(f)
+	r := csv.NewReader(reader)
 	r.Comma = SEPARATOR
 	r.ReuseRecord = true
 
