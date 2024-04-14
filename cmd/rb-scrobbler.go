@@ -17,10 +17,10 @@ import (
 func main() {
 	logPath := flag.String("f", "", "Path to .scrobbler.log")
 	offset := flag.Float64("o", 0,
-		"Time difference from UTC (format +10 or -10.5")
+		"Time difference from UTC (format +10 or -10.5)")
 	nonInteractive := flag.String("n", "",
-		"Non Interactive Mode: Automatically (\"keep\", \"delete\""+
-			"or \"delete-on-success\") at end of program")
+		`Non Interactive Mode:
+Automatically ("keep", "delete" or "delete-on-success") at end of program`)
 	auth := flag.Bool("auth", false, "First Time Authentication")
 	colours := flag.Bool("nc", true,
 		"No Terminal Colours (Default behaviour on Windows)")
