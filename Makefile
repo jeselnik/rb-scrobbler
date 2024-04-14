@@ -4,7 +4,7 @@ API_KEY = ${key}
 API_SECRET = ${secret}
 
 build:
-	go build -tags netgo -o build/${EXECUTABLE} cmd/*.go
+	go build -o build/${EXECUTABLE} cmd/*.go
 
 get:
 	go get github.com/shkh/lastfm-go/lastfm
