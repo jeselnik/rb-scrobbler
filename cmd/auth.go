@@ -4,7 +4,7 @@ session key in a cross OS manner */
 package main
 
 import (
-	"io/ioutil"
+	"io"
 	"log"
 	"os"
 	"path/filepath"
@@ -33,7 +33,7 @@ func getSavedKey() (string, error) {
 	}
 	defer keyFile.Close()
 
-	keyInBytes, err := ioutil.ReadAll(keyFile)
+	keyInBytes, err := io.ReadAll(keyFile)
 	if err != nil {
 		return "", err
 	}
