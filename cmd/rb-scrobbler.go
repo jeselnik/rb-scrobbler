@@ -39,7 +39,7 @@ Automatically ("keep", "delete" or "delete-on-success") at end of program`)
 		/* https://www.last.fm/api/desktopauth */
 
 		/* Create folder to store session key */
-		err := os.Mkdir(getConfigDir(), os.ModePerm)
+		err := os.Mkdir(getConfigDir(), 0700)
 		if err != nil && !errors.Is(err, os.ErrExist) {
 			log.Fatal(err)
 		}
@@ -64,14 +64,14 @@ Automatically ("keep", "delete" or "delete-on-success") at end of program`)
 
 		sessionKey := api.GetSessionKey()
 		/* Save session key in $CONFIG/rb-scrobbler */
-		err = os.WriteFile(getKeyFilePath(), []byte(sessionKey), os.ModePerm)
+		err = os.WriteFile(getKeyFilePath(), []byte(sessionKey), 0600)
 		if errors.Is(err, os.ErrExist) {
 			err = os.Remove(getKeyFilePath())
 			if err != nil {
 				log.Fatal(err)
 			}
 			err = os.WriteFile(getKeyFilePath(), []byte(sessionKey),
-				os.ModePerm)
+				0600)
 			if err != nil {
 				log.Fatal(err)
 			}
