@@ -11,7 +11,11 @@ import (
 
 func getConfigDir() (string, error) {
 	dir, err := os.UserConfigDir()
-	return filepath.Join(dir, "rb-scrobbler"), err
+	if err != nil {
+		return "", err
+	}
+
+	return filepath.Join(dir, "rb-scrobbler"), nil
 }
 
 func getKeyFilePath() (string, error) {
