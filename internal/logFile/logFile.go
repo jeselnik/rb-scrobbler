@@ -85,7 +85,7 @@ func deleteLogFile(path *string) (exitCode int) {
 		fmt.Printf("Error Deleting %q!\n%v\n", *path, deletionError)
 		exitCode = 1
 	} else {
-		fmt.Printf("%q Deleted!\n", *path)
+		fmt.Printf("%q deleted!\n", *path)
 	}
 	return exitCode
 }
