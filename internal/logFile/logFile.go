@@ -10,7 +10,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/Jeselnik/rb-scrobbler/internal/track"
+	"github.com/jeselnik/rb-scrobbler/internal/track"
 )
 
 const (

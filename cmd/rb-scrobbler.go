@@ -9,8 +9,8 @@ import (
 	"os"
 	"runtime"
 
-	"github.com/Jeselnik/rb-scrobbler/internal/logFile"
-	"github.com/Jeselnik/rb-scrobbler/internal/track"
+	"github.com/jeselnik/rb-scrobbler/internal/logFile"
+	"github.com/jeselnik/rb-scrobbler/internal/track"
 	"github.com/shkh/lastfm-go/lastfm"
 )
 
@@ -75,17 +75,7 @@ Automatically ("keep", "delete" or "delete-on-success") at end of program`)
 		}
 
 		err = os.WriteFile(keyPath, []byte(sessionKey), 0600)
-		if errors.Is(err, os.ErrExist) {
-			err = os.Remove(keyPath)
-			if err != nil {
-				log.Fatal(err)
-			}
-			err = os.WriteFile(keyPath, []byte(sessionKey),
-				0600)
-			if err != nil {
-				log.Fatal(err)
-			}
-		} else if err != nil {
+		if err != nil {
 			log.Fatal(err)
 		}
 
