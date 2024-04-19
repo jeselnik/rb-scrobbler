@@ -23,8 +23,10 @@ var ErrInvalidLog = errors.New("invalid .scrobbler.log")
 
 func ImportLog(path *string, offset *float64) ([]track.Track, error) {
 
-	var logErr error = nil
-	var tracks []track.Track
+	var (
+		logErr error = nil
+		tracks []track.Track
+	)
 
 	f, err := os.Open(*path)
 	if err != nil {

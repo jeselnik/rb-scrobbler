@@ -34,8 +34,10 @@ func StringToTrack(line []string, offset float64) (Track, error) {
 	just in case a track or album is named "L". If anything like this exists
 	and was skipped the old method would false positive it as listened
 	and then it'd be submitted */
-	var timestamp string = line[TIMESTAMP_INDEX]
-	var err error = nil
+	var (
+		timestamp string = line[TIMESTAMP_INDEX]
+		err       error  = nil
+	)
 
 	/* If user has a player with no Real Time Clock, the log file gives it
 	a timestamp of 0. Last.fm API doesn't accept scrobbles dated that far
