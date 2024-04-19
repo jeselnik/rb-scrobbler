@@ -72,7 +72,7 @@ func convertTimeStamp(timestamp string, offset float64) string {
 
 	offsetInSec := offset * SECONDS_IN_HOUR
 
-	converted := timestampFlt + (-offsetInSec)
+	converted := timestampFlt - offsetInSec
 
 	return strconv.FormatInt(int64(converted), 10)
 }
