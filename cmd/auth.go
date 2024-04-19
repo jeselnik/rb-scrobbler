@@ -5,29 +5,28 @@ package main
 
 import (
 	"io"
-	"log"
 	"os"
 	"path/filepath"
 )
 
-func getConfigDir() string {
+func getConfigDir() (string, error) {
 	dir, err := os.UserConfigDir()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	return filepath.Join(dir, "rb-scrobbler")
+	return filepath.Join(dir, "rb-scrobbler"), err
 }
 
-func getKeyFilePath() string {
-	return filepath.Join(getConfigDir(), "rb-scrobbler.key")
+func getKeyFilePath() (string, error) {
+	configDir, err := getConfigDir()
+	return filepath.Join(configDir, "rb-scrobbler.key"), err
 }
 
 /* Open saved key from disk */
 func getSavedKey() (string, error) {
-	keyPath := getKeyFilePath()
-	keyFile, err := os.Open(keyPath)
+	keyPath, err := getKeyFilePath()
+	if err != nil {
+		return "", err
+	}
 
+	keyFile, err := os.Open(keyPath)
 	if err != nil {
 		return "", err
 	}
