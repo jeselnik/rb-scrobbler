@@ -2,7 +2,6 @@ package track
 
 import (
 	"fmt"
-	"log"
 	"strconv"
 	"time"
 
@@ -30,19 +29,13 @@ type Track struct {
 	artist, album, title, timestamp string
 }
 
-type Tracks []Track
-
-func StringToTrack(line []string, offset float64) Track {
+func StringToTrack(line []string, offset float64) (Track, error) {
 	/* Check the "RATING" index instead of looking for "\tL\t" in a line,
 	just in case a track or album is named "L". If anything like this exists
 	and was skipped the old method would false positive it as listened
 	and then it'd be submitted */
 	var timestamp string = line[TIMESTAMP_INDEX]
-
-	/* Time conversion - the API wants it in UTC timezone */
-	if offset != 0 || timestamp == TIMESTAMP_NO_RTC {
-		timestamp = convertTimeStamp(timestamp, offset)
-	}
+	var err error = nil
 
 	/* If user has a player with no Real Time Clock, the log file gives it
 	a timestamp of 0. Last.fm API doesn't accept scrobbles dated that far
@@ -52,6 +45,11 @@ func StringToTrack(line []string, offset float64) Track {
 		timestamp = strconv.FormatInt(time.Now().Unix(), 10)
 	}
 
+	/* Time conversion - the API wants it in UTC timezone */
+	if offset != 0 {
+		timestamp, err = convertTimeStamp(timestamp, offset)
+	}
+
 	track := Track{
 		artist:    line[ARTIST_INDEX],
 		album:     line[ALBUM_INDEX],
@@ -59,25 +57,24 @@ func StringToTrack(line []string, offset float64) Track {
 		timestamp: timestamp,
 	}
 
-	return track
+	return track, err
 
 }
 
 /* Convert back/to UTC from localtime */
-func convertTimeStamp(timestamp string, offset float64) string {
+func convertTimeStamp(timestamp string, offset float64) (string, error) {
 	timestampFlt, err := strconv.ParseFloat(timestamp, 64)
 	if err != nil {
-		log.Fatal(err)
+		return "", err
 	}
 
 	offsetInSec := offset * SECONDS_IN_HOUR
-
 	converted := timestampFlt - offsetInSec
 
-	return strconv.FormatInt(int64(converted), 10)
+	return strconv.FormatInt(int64(converted), 10), nil
 }
 
-func Scrobble(api *lastfm.Api, tracks Tracks, colours *bool) (
+func Scrobble(api *lastfm.Api, tracks []Track, colours *bool) (
 	success, fail uint) {
 
 	var successString, failString string

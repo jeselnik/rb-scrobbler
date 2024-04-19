@@ -21,10 +21,10 @@ const (
 
 var ErrInvalidLog = errors.New("invalid .scrobbler.log")
 
-func ImportLog(path *string, offset *float64) (track.Tracks, error) {
+func ImportLog(path *string, offset *float64) ([]track.Track, error) {
 
 	var logErr error = nil
-	var tracks track.Tracks
+	var tracks []track.Track
 
 	f, err := os.Open(*path)
 	if err != nil {
@@ -54,7 +54,6 @@ func ImportLog(path *string, offset *float64) (track.Tracks, error) {
 			logErr = ErrInvalidLog
 			break
 		}
-
 		first = false
 
 		if headers.MatchString(line[0]) {
@@ -65,7 +64,12 @@ func ImportLog(path *string, offset *float64) (track.Tracks, error) {
 			continue
 		}
 
-		tracks = append(tracks, track.StringToTrack(line, *offset))
+		trackObj, err := track.StringToTrack(line, *offset)
+		if err != nil {
+			continue
+		}
+
+		tracks = append(tracks, trackObj)
 
 	}
 

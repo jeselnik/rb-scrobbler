@@ -49,7 +49,7 @@ func TestLogLineToTrack(t *testing.T) {
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-			gotTrack := StringToTrack(test.input, test.offset)
+			gotTrack, _ := StringToTrack(test.input, test.offset)
 			trackEqual := true
 			if !(test.expectedTrack.artist == gotTrack.artist) {
 				trackEqual = false
@@ -87,7 +87,7 @@ func TestConvertTimeStamp(t *testing.T) {
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-			result := convertTimeStamp(test.timestamp, test.offset)
+			result, _ := convertTimeStamp(test.timestamp, test.offset)
 
 			if result != test.expected {
 				t.Errorf("Test %q failed. Expected %q, got %q\n",
