@@ -7,7 +7,7 @@ build:
 	go build -o build/${EXECUTABLE} cmd/*.go
 
 get:
-	go get github.com/shkh/lastfm-go/lastfm
+	go get github.com/sonjek/go-lastfm/lastfm
 
 test:
 	go test -v internal/track/*.go

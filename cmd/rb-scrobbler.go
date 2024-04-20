@@ -11,7 +11,7 @@ import (
 
 	"github.com/jeselnik/rb-scrobbler/internal/logFile"
 	"github.com/jeselnik/rb-scrobbler/internal/track"
-	"github.com/shkh/lastfm-go/lastfm"
+	"github.com/sonjek/go-lastfm/lastfm"
 )
 
 func main() {

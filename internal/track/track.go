@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/shkh/lastfm-go/lastfm"
+	"github.com/sonjek/go-lastfm/lastfm"
 )
 
 const (

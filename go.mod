@@ -1,5 +1,5 @@
-module github.com/Jeselnik/rb-scrobbler
+module github.com/jeselnik/rb-scrobbler
 
 go 1.22
 
-require github.com/shkh/lastfm-go v0.0.0-20191215035245-89a801c244e0
+require github.com/sonjek/go-lastfm v0.0.6

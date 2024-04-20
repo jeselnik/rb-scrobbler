@@ -1,2 +1,2 @@
-github.com/shkh/lastfm-go v0.0.0-20191215035245-89a801c244e0 h1:cgqwZtnR+IQfUYDLJ3Kiy4aE+O/wExTzEIg8xwC4Qfs=
-github.com/shkh/lastfm-go v0.0.0-20191215035245-89a801c244e0/go.mod h1:n3nudMl178cEvD44PaopxH9jhJaQzthSxUzLO5iKMy4=
+github.com/sonjek/go-lastfm v0.0.6 h1:waPUOrQVhRq1TO9V9VwtqCZUKcbIhZVSbNMYUOUjRYs=
+github.com/sonjek/go-lastfm v0.0.6/go.mod h1:GKzcGFVl0uNb8Un+XZobXSltX2yTlGACmYh3FJewbWE=
