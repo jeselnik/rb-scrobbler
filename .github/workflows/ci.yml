@@ -1,0 +1,41 @@
+name: CI
+on:
+  push:
+    branches:
+      - master
+      - dev
+      - tsv
+
+env:
+  key: ${{ secrets.API_KEY }}
+  secret: ${{ secrets.API_SECRET }}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-go@v5
+      with:
+        go-version: '1.22'
+    - name: Test
+      run: make test
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-go@v5
+      with:
+        go-version: '1.22'
+    - name: Embed Keys
+      run: make embed-keys
+    - name: Build
+      run: make release
+    - name: Keep Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: builds
+        path: build
+        retention-days: 7

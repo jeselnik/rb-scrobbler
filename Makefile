@@ -29,7 +29,7 @@ test:
 embed-keys:
 	sed -e "s/key/${API_KEY}/g" -e "s/secret/${API_SECRET}/g" -i cmd/api-keys.go
 
-release: $(DISTS) static
+release: get $(DISTS) static
 
 $(DISTS):
 	GOOS=$(OS) GOARCH=$(ARCH) go build -o build/${EXECUTABLE}-$(OS)-$(ARCH) cmd/*.go
