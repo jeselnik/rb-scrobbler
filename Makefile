@@ -31,5 +31,11 @@ release: $(DISTS)
 $(DISTS):
 	GOOS=$(OS) GOARCH=$(ARCH) go build -o build/${EXECUTABLE}-$(OS)-$(ARCH) cmd/*.go
 
+# Also provide a statically linked binary for linux amd64
+	@if [ "$(OS)" = "linux" ] && [ "$(ARCH)" = "amd64" ]; \
+	then \
+		CGO_ENABLED=0 GOOS=$(OS) GOARCH=$(ARCH) go build -o build/${EXECUTABLE}-$(OS)-$(ARCH)-static cmd/*.go; \
+	fi
+
 clean:
 	rm -r build
