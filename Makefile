@@ -1,10 +1,16 @@
-.PHONY: build get test cross-compile clean embed-keys
-EXECUTABLE=rb-scrobbler
+.PHONY: build install get test cross-compile clean embed-keys
+
 API_KEY = ${key}
 API_SECRET = ${secret}
 
+EXECUTABLE=rb-scrobbler
+INSTALL_DIR=/usr/local/bin
+
 build:
 	go build -o build/${EXECUTABLE} cmd/*.go
+
+install:
+	install -m 755 build/${EXECUTABLE} ${INSTALL_DIR}
 
 get:
 	go get github.com/sonjek/go-lastfm/lastfm
