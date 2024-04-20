@@ -1,10 +1,15 @@
-.PHONY: build install get test cross-compile clean embed-keys
+.PHONY: build install get test release $(DISTS) clean embed-keys
 
 API_KEY = ${key}
 API_SECRET = ${secret}
 
-EXECUTABLE=rb-scrobbler
-INSTALL_DIR=/usr/local/bin
+EXECUTABLE := rb-scrobbler
+INSTALL_DIR := /usr/local/bin
+
+DISTS := linux/amd64 linux/arm64 darwin/amd64 darwin/arm64 windows/amd64 windows/arm64
+TEMP = $(subst /, ,$@)
+OS = $(word 1, $(TEMP))
+ARCH = $(word 2, $(TEMP))
 
 build:
 	go build -o build/${EXECUTABLE} cmd/*.go
@@ -21,10 +26,10 @@ test:
 embed-keys:
 	sed -e "s/key/${API_KEY}/g" -e "s/secret/${API_SECRET}/g" -i cmd/api-keys.go
 
-cross-compile:
-	GOOS=windows GOARCH=amd64 go build -o build/${EXECUTABLE}-windows.exe cmd/*.go
-	GOOS=darwin GOARCH=amd64 go build -o build/${EXECUTABLE}-mac-amd64 cmd/*.go
-	GOOS=darwin GOARCH=arm64 go build -o build/${EXECUTABLE}-mac-arm64 cmd/*.go
+release: $(DISTS)
+
+$(DISTS):
+	GOOS=$(OS) GOARCH=$(ARCH) go build -o build/${EXECUTABLE}-$(OS)-$(ARCH) cmd/*.go
 
 clean:
 	rm -r build
