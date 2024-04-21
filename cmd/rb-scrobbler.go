@@ -97,7 +97,7 @@ Automatically ("keep", "delete" or "delete-on-success") at end of program`)
 
 		offsetSec := int(*offset * SECONDS_IN_HOUR)
 
-		tracks, err := logFile.ImportLog(logPath, offsetSec)
+		tracks, err := logFile.ImportLog(logPath, offsetSec, colours)
 		if err != nil {
 			log.Fatal(err)
 		}

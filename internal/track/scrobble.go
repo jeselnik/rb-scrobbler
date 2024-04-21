@@ -6,31 +6,54 @@ import (
 	"github.com/sonjek/go-lastfm/lastfm"
 )
 
+const (
+	SUCCESS_STR = "%s[OK]%s %s - %s\n"
+	FAIL_STR    = "%s[FAIL]%s %s - %s\n"
+
+	GREEN = "\u001b[32;1m"
+	RED   = "\u001b[31;1m"
+	CLEAR = "\u001b[0m"
+)
+
+func PrintResult(success, colours bool, track Track) {
+	var (
+		pattern, colour, clear string
+	)
+
+	if success {
+		pattern = SUCCESS_STR
+		colour = GREEN
+	} else {
+		pattern = FAIL_STR
+		colour = RED
+	}
+
+	if !colours {
+		colour = ""
+		clear = ""
+	}
+
+	fmt.Printf(pattern, colour, clear, track.artist, track.title)
+}
+
 func Scrobble(api *lastfm.Api, tracks []Track, colours *bool) (
 	success, fail uint) {
-
-	var successString, failString string
-
-	if *colours {
-		successString = SUCCESS_STR_COLOURED
-		failString = FAIL_STR_COLOURED
-	} else {
-		successString = SUCCESS_STR
-		failString = FAIL_STR
-	}
 
 	for _, track := range tracks {
 		p := lastfm.P{"artist": track.artist, "album": track.album,
 			"track": track.title, "timestamp": track.timestamp}
 
+		successful := false
+
 		res, err := api.Track.Scrobble(p)
 		if err != nil || res.Ignored != "0" {
-			fmt.Printf(failString, track.artist, track.title)
 			fail++
 		} else {
-			fmt.Printf(successString, track.artist, track.title)
+			successful = true
 			success++
 		}
+
+		PrintResult(successful, *colours, track)
 	}
 
 	return

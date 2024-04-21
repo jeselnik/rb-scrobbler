@@ -21,7 +21,7 @@ const (
 
 var ErrInvalidLog = errors.New("invalid .scrobbler.log")
 
-func ImportLog(path *string, offset int) ([]track.Track, error) {
+func ImportLog(path *string, offset int, colours *bool) ([]track.Track, error) {
 
 	var (
 		logErr error = nil
@@ -73,7 +73,7 @@ func ImportLog(path *string, offset int) ([]track.Track, error) {
 
 		trackObj, err := track.StringToTrack(line, offset)
 		if err != nil {
-			continue
+			track.PrintResult(false, *colours, trackObj)
 		}
 
 		tracks = append(tracks, trackObj)
