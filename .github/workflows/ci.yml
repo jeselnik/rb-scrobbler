@@ -9,7 +9,7 @@ on:
 env:
   key: ${{ secrets.API_KEY }}
   secret: ${{ secrets.API_SECRET }}
-  MAKEFLAGS: -j$(nproc)
+  MAKEFLAGS: -j4
 
 jobs:
   test:
