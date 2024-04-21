@@ -21,7 +21,7 @@ const (
 
 var ErrInvalidLog = errors.New("invalid .scrobbler.log")
 
-func ImportLog(path *string, offset *float64) ([]track.Track, error) {
+func ImportLog(path *string, offset int) ([]track.Track, error) {
 
 	var (
 		logErr error = nil
@@ -33,11 +33,12 @@ func ImportLog(path *string, offset *float64) ([]track.Track, error) {
 		return tracks, logErr
 	}
 	defer f.Close()
-	reader := bufio.NewReader(f)
 
-	r := csv.NewReader(reader)
+	r := csv.NewReader(f)
 	r.Comma = SEPARATOR
 	r.ReuseRecord = true
+	r.LazyQuotes = true
+	r.FieldsPerRecord = -1
 
 	headers, err := regexp.Compile(REGEX_HEADERS)
 	if err != nil {
@@ -62,17 +63,20 @@ func ImportLog(path *string, offset *float64) ([]track.Track, error) {
 			continue
 		}
 
+		/* Check the "RATING" index instead of looking for "\tL\t" in a line,
+		just in case a track or album is named "L". If anything like this exists
+		and was skipped the old method would false positive it as listened
+		and then it'd be submitted */
 		if line[track.RATING_INDEX] != track.LISTENED {
 			continue
 		}
 
-		trackObj, err := track.StringToTrack(line, *offset)
+		trackObj, err := track.StringToTrack(line, offset)
 		if err != nil {
 			continue
 		}
 
 		tracks = append(tracks, trackObj)
-
 	}
 
 	return tracks, logErr
