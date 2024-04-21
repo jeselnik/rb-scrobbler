@@ -14,6 +14,8 @@ import (
 	"github.com/sonjek/go-lastfm/lastfm"
 )
 
+const SECONDS_IN_HOUR = 3600
+
 func main() {
 	logPath := flag.String("f", "", "Path to .scrobbler.log")
 	offset := flag.Float64("o", 0,
@@ -93,7 +95,9 @@ Automatically ("keep", "delete" or "delete-on-success") at end of program`)
 	/* When given a file, start executing here */
 	if *logPath != "" {
 
-		tracks, err := logFile.ImportLog(logPath, offset)
+		offsetSec := int(*offset * SECONDS_IN_HOUR)
+
+		tracks, err := logFile.ImportLog(logPath, offsetSec)
 		if err != nil {
 			log.Fatal(err)
 		}

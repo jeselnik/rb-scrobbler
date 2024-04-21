@@ -15,7 +15,7 @@ func TestLogLineToTrack(t *testing.T) {
 	testCases := []struct {
 		name          string
 		input         []string
-		offset        float64
+		offset        int
 		expectedTrack Track
 	}{
 		{"SkipTrack",
@@ -72,17 +72,18 @@ func TestLogLineToTrack(t *testing.T) {
 }
 
 func TestConvertTimeStamp(t *testing.T) {
+	const SECONDS_IN_HOUR = 3600
 	testCases := []struct {
 		name      string
 		timestamp string
-		offset    float64
+		offset    int
 		expected  string
 	}{
-		{"ForwardFromUTC", TEST_TIMESTAMP, +10, "1579607462"},
-		{"ForwardFromUTCLiteral", TEST_TIMESTAMP, 10, "1579607462"},
-		{"BackFromUTC", TEST_TIMESTAMP, -10, "1579679462"},
-		{"ForwardFromUTCHalfHour", TEST_TIMESTAMP, +0.5, "1579641662"},
-		{"BackFromUTCHalfHour", TEST_TIMESTAMP, -0.5, "1579645262"},
+		{"ForwardFromUTC", TEST_TIMESTAMP, int(+10 * SECONDS_IN_HOUR), "1579607462"},
+		{"ForwardFromUTCLiteral", TEST_TIMESTAMP, int(10 * SECONDS_IN_HOUR), "1579607462"},
+		{"BackFromUTC", TEST_TIMESTAMP, int(-10 * SECONDS_IN_HOUR), "1579679462"},
+		{"ForwardFromUTCHalfHour", TEST_TIMESTAMP, int(+0.5 * SECONDS_IN_HOUR), "1579641662"},
+		{"BackFromUTCHalfHour", TEST_TIMESTAMP, int(-0.5 * SECONDS_IN_HOUR), "1579645262"},
 	}
 
 	for _, test := range testCases {

@@ -21,19 +21,13 @@ const (
 	RATING_INDEX     = 5
 	TIMESTAMP_INDEX  = 6
 	TIMESTAMP_NO_RTC = "0"
-
-	SECONDS_IN_HOUR = 3600
 )
 
 type Track struct {
 	artist, album, title, timestamp string
 }
 
-func StringToTrack(line []string, offset float64) (Track, error) {
-	/* Check the "RATING" index instead of looking for "\tL\t" in a line,
-	just in case a track or album is named "L". If anything like this exists
-	and was skipped the old method would false positive it as listened
-	and then it'd be submitted */
+func StringToTrack(line []string, offset int) (Track, error) {
 	var (
 		timestamp string = line[TIMESTAMP_INDEX]
 		err       error  = nil
@@ -64,16 +58,15 @@ func StringToTrack(line []string, offset float64) (Track, error) {
 }
 
 /* Convert back/to UTC from localtime */
-func convertTimeStamp(timestamp string, offset float64) (string, error) {
-	timestampFlt, err := strconv.ParseFloat(timestamp, 64)
+func convertTimeStamp(timestamp string, offset int) (string, error) {
+	timestampFlt, err := strconv.Atoi(timestamp)
 	if err != nil {
 		return "", err
 	}
 
-	offsetInSec := offset * SECONDS_IN_HOUR
-	converted := timestampFlt - offsetInSec
+	converted := timestampFlt - offset
 
-	return strconv.FormatInt(int64(converted), 10), nil
+	return strconv.Itoa(converted), nil
 }
 
 func Scrobble(api *lastfm.Api, tracks []Track, colours *bool) (
