@@ -17,8 +17,9 @@ const (
 
 func PrintResult(success, colours bool, track Track) {
 	var (
-		pattern, colour, clear string
+		pattern, colour string
 	)
+	clear := CLEAR
 
 	if success {
 		pattern = SUCCESS_STR
