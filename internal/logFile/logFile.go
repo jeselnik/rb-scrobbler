@@ -73,7 +73,7 @@ func ImportLog(path *string, offset int, colours *bool) ([]track.Track, error) {
 
 		trackObj, err := track.StringToTrack(line, offset)
 		if err != nil {
-			track.PrintResult(false, *colours, trackObj)
+			track.PrintResult(false, colours, trackObj)
 		}
 
 		tracks = append(tracks, trackObj)

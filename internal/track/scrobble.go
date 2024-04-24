@@ -15,7 +15,7 @@ const (
 	CLEAR = "\u001b[0m"
 )
 
-func PrintResult(success, colours bool, track Track) {
+func PrintResult(success bool, colours *bool, track Track) {
 	var (
 		pattern, colour string
 	)
@@ -29,7 +29,7 @@ func PrintResult(success, colours bool, track Track) {
 		colour = RED
 	}
 
-	if !colours {
+	if !(*colours) {
 		colour = ""
 		clear = ""
 	}
@@ -44,17 +44,17 @@ func Scrobble(api *lastfm.Api, tracks []Track, colours *bool) (
 		p := lastfm.P{"artist": track.artist, "album": track.album,
 			"track": track.title, "timestamp": track.timestamp}
 
-		successful := false
+		isSuccess := false
 
 		res, err := api.Track.Scrobble(p)
 		if err != nil || res.Ignored != "0" {
 			fail++
 		} else {
-			successful = true
+			isSuccess = true
 			success++
 		}
 
-		PrintResult(successful, *colours, track)
+		PrintResult(isSuccess, colours, track)
 	}
 
 	return
