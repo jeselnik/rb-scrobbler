@@ -2,39 +2,41 @@ package track
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/sonjek/go-lastfm/lastfm"
 )
 
 const (
-	SUCCESS_STR = "%s[OK]%s %s - %s\n"
-	FAIL_STR    = "%s[FAIL]%s %s - %s\n"
-
 	GREEN = "\u001b[32;1m"
 	RED   = "\u001b[31;1m"
 	CLEAR = "\u001b[0m"
 )
 
 func PrintResult(success bool, colours *bool, track Track) {
-	var (
-		pattern, colour string
-	)
-	clear := CLEAR
+	var msg strings.Builder
+
+	if success && *colours {
+		msg.WriteString(GREEN)
+	} else if !success && *colours {
+		msg.WriteString(RED)
+	}
 
 	if success {
-		pattern = SUCCESS_STR
-		colour = GREEN
+		msg.WriteString("[OK] ")
 	} else {
-		pattern = FAIL_STR
-		colour = RED
+		msg.WriteString("[FAIL] ")
 	}
 
-	if !(*colours) {
-		colour = ""
-		clear = ""
+	if *colours {
+		msg.WriteString(CLEAR)
 	}
 
-	fmt.Printf(pattern, colour, clear, track.artist, track.title)
+	msg.WriteString(track.artist)
+	msg.WriteString(" - ")
+	msg.WriteString(track.title)
+
+	fmt.Println(msg.String())
 }
 
 func Scrobble(api *lastfm.Api, tracks []Track, colours *bool) (
