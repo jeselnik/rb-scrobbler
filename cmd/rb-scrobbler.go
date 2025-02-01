@@ -92,33 +92,31 @@ Automatically ("keep", "delete" or "delete-on-success") at end of program`)
 		fmt.Printf("%s authenticated\n", userName)
 	}
 
-	/* When given a file, start executing here */
-	if *logPath != "" {
-
-		offsetSec := int(*offset * SECONDS_IN_HOUR)
-
-		tracks, err := logFile.ImportLog(logPath, offsetSec, colours)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		/* Login here, after tracks have been parsed and are ready to send */
-		sessionKey, err := getSavedKey()
-		if err != nil {
-			log.Fatal(err)
-		}
-		api.SetSession(sessionKey)
-
-		success, fail := track.Scrobble(api, tracks, colours)
-		fmt.Printf("\nFinished: %d tracks scrobbled, %d failed, %d total\n",
-			success, fail, len(tracks))
-
-		/* Handling of file (manual/non interactive delete/keep) */
-		os.Exit(logFile.HandleFile(nonInteractive, logPath, fail))
-
-	} else if !(*auth) {
+	if *logPath == "" {
 		fmt.Println("File (-f) cannot be empty!")
 		os.Exit(1)
 	}
+
+	/* When given a file, start executing here */
+	offsetSec := int(*offset * SECONDS_IN_HOUR)
+
+	tracks, err := logFile.ImportLog(logPath, offsetSec, colours)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	/* Login here, after tracks have been parsed and are ready to send */
+	sessionKey, err := getSavedKey()
+	if err != nil {
+		log.Fatal(err)
+	}
+	api.SetSession(sessionKey)
+
+	success, fail := track.Scrobble(api, tracks, colours)
+	fmt.Printf("\nFinished: %d tracks scrobbled, %d failed, %d total\n",
+		success, fail, len(tracks))
+
+	/* Handling of file (manual/non interactive delete/keep) */
+	os.Exit(logFile.HandleFile(nonInteractive, logPath, fail))
 
 }
