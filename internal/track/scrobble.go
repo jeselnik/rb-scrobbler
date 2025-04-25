@@ -51,6 +51,7 @@ func Scrobble(api *lastfm.Api, tracks []Track, colours *bool) (
 			"trackNumber": track.position,
 			"timestamp":   track.timestamp,
 			"mbid":        track.mbid,
+			"albumArtist": track.albumArtist,
 		}
 
 		isSuccess := false
