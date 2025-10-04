@@ -6,17 +6,21 @@ import (
 )
 
 const (
-	LISTENED         = "L"
-	ARTIST_INDEX     = 0
-	ALBUM_INDEX      = 1
-	TITLE_INDEX      = 2
-	RATING_INDEX     = 5
-	TIMESTAMP_INDEX  = 6
-	TIMESTAMP_NO_RTC = "0"
+	LISTENED           = "L"
+	ARTIST_INDEX       = 0
+	ALBUM_INDEX        = 1
+	TITLE_INDEX        = 2
+	POSITION_INDEX     = 3
+	DURATION_INDEX     = 4
+	RATING_INDEX       = 5
+	TIMESTAMP_INDEX    = 6
+	MBID_INDEX         = 7
+	ALBUM_ARTIST_INDEX = 8
+	TIMESTAMP_NO_RTC   = "0"
 )
 
 type Track struct {
-	artist, album, title, timestamp string
+	artist, album, title, position, duration, rating, timestamp, mbid, albumArtist string
 }
 
 func StringToTrack(line []string, offset int) (Track, error) {
@@ -38,11 +42,26 @@ func StringToTrack(line []string, offset int) (Track, error) {
 		timestamp, err = convertTimeStamp(timestamp, offset)
 	}
 
+	mbid := ""
+	if len(line) > 7 {
+		mbid = line[MBID_INDEX]
+	}
+
+	albumArtist := ""
+	if len(line) > 8 {
+		albumArtist = line[ALBUM_ARTIST_INDEX]
+	}
+
 	track := Track{
-		artist:    line[ARTIST_INDEX],
-		album:     line[ALBUM_INDEX],
-		title:     line[TITLE_INDEX],
-		timestamp: timestamp,
+		artist:      line[ARTIST_INDEX],
+		album:       line[ALBUM_INDEX],
+		title:       line[TITLE_INDEX],
+		position:    line[POSITION_INDEX],
+		duration:    line[DURATION_INDEX],
+		rating:      line[RATING_INDEX],
+		timestamp:   timestamp,
+		mbid:        mbid,
+		albumArtist: albumArtist,
 	}
 
 	return track, err
