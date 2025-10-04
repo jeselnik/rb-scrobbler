@@ -54,11 +54,11 @@ and the feature is implemented in Rockbox.
 If a binary does not exist for your system compilation is trivial.
 All that is required is an installation of Go and a last.fm [API key](https://www.last.fm/api/account/create).
 
-        1. Navigate to `src/api_keys.go` in your editor of choice 
-         and fill in the empty fields with your API Keys
-        2. In the main project directory run `make get` to download the lastfm-go dependency
-        3. Run `make build` to build an executable for your host system
-        4. Your compiled binary will be within the build/ folder
+1. Navigate to `src/api_keys.go` in your editor of choice 
+ and fill in the empty fields with your API Keys
+2. In the main project directory run `make get` to download the lastfm-go dependency
+3. Run `make build` to build an executable for your host system
+4. Your compiled binary will be within the build/ folder
 
 ## .scrobbler.log
 
