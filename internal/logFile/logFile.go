@@ -51,6 +51,9 @@ func ImportLog(path *string, offset int, colours *bool) ([]track.Track, error) {
 
 		if err == io.EOF {
 			break
+		} else if err != nil {
+			logErr = err
+			break
 		}
 
 		if first && !strings.Contains(line[0], AUDIOSCROBBLER_HEADER) {
