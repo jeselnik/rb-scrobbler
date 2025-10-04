@@ -29,10 +29,10 @@ func StringToTrack(line []string, offset int) (Track, error) {
 		err       error  = nil
 	)
 
-	/* If user has a player with no Real Time Clock, the log file gives it
-	a timestamp of 0. Last.fm API doesn't accept scrobbles dated that far
+	/* If the user has a player with no Real Time Clock, the log file gives it
+	a timestamp of 0. The last.fm API doesn't accept scrobbles dated that far
 	into the past so in the interests of at least having the tracks sent,
-	date them with current local time */
+	date them with the current local time */
 	if timestamp == TIMESTAMP_NO_RTC {
 		timestamp = strconv.FormatInt(time.Now().Unix(), 10)
 	}
