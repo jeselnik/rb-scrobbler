@@ -33,7 +33,7 @@ embed-keys:
 release: get $(DISTS) static
 
 $(DISTS):
-	GOOS=$(OS) GOARCH=$(ARCH) go build -o build/${EXECUTABLE}-$(OS)-$(ARCH) cmd/*.go
+	GOOS=$(OS) GOARCH=$(ARCH) go build -o build/${EXECUTABLE}-$(OS)-$(ARCH)$(EXT) cmd/*.go
 
 static:
 	CGO_ENABLED=0 GOOS='linux' GOARCH='amd64' go build -o build/${EXECUTABLE}-linux-amd64-static cmd/*.go; 
