@@ -10,10 +10,10 @@ to [last.fm](https://last.fm).
 
 Compared to other tools rb-scrobbler has advantages such as:
 
-        1. Session key authentication via the desktop authentication stream
-        2. Does not rely on outdated dependencies
-        3. Cross platform, can be compiled for any OS and architecture supported by the Go compiler
-        4. Single statically linked binary - no extra dependencies required
+* Session key authentication via the desktop authentication stream
+* Does not rely on outdated dependencies
+* Cross platform, can be compiled for any OS and architecture supported by the Go compiler
+* Single statically linked binary - no extra dependencies required
 
 ## Usage
 
