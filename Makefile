@@ -3,10 +3,11 @@
 API_KEY := ${key}
 API_SECRET := ${secret}
 
-DISTS := linux/amd64 linux/arm64 darwin/amd64 darwin/arm64 windows/amd64 windows/arm64
+DISTS := linux/amd64 linux/arm64 darwin/amd64 darwin/arm64 windows/amd64/.exe windows/arm64/.exe
 TEMP = $(subst /, ,$@)
 OS = $(word 1, $(TEMP))
 ARCH = $(word 2, $(TEMP))
+EXT = $(word 3, $(TEMP))
 
 EXECUTABLE := rb-scrobbler
 INSTALL_DIR := /usr/local/bin
