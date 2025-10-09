@@ -19,7 +19,7 @@ install:
 	install -m 755 build/${EXECUTABLE} ${INSTALL_DIR}
 
 get:
-	go get github.com/sonjek/go-lastfm/lastfm
+	go mod download
 
 clean:
 	rm -r build
