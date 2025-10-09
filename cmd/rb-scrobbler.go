@@ -98,7 +98,7 @@ Automatically ("keep", "delete" or "delete-on-success") at end of program`)
 	}
 
 	/* When given a file, start executing here */
-	offsetSec := int(*offset * SECONDS_IN_HOUR)
+	offsetSec := float64(*offset * SECONDS_IN_HOUR)
 
 	tracks, err := logFile.ImportLog(logPath, offsetSec, colours)
 	if err != nil {
