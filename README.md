@@ -83,15 +83,13 @@ other players which generate these log files. (Special thanks to @Nerten though 
 
 As with everything built on the last.fm API; scrobbles older than two weeks will not propagate on their database despite what the response will tell you.
 
-## TODO / Bugs
+## TODO / Bugs / Wishlist
 
-   * Improve accuracy of fail count by parsing the ignored message in scrobble result
-   * Support batch scrobbling
    * libre.fm/musicbrainz support
 
 ## Built With
 
-  * [lastfm-go](https://github.com/sonjek/go-lastfm)
+  * [gobble-fm](https://github.com/twoscott/gobble-fm)
 
 ## Inspired by
 
