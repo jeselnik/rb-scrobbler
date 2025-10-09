@@ -23,7 +23,6 @@ const (
 var ErrInvalidLog = errors.New("invalid .scrobbler.log")
 
 func ImportLog(path *string, offset float64, colours *bool) (lastfm.ScrobbleMultiParams, error) {
-
 	var (
 		logErr error = nil
 		tracks lastfm.ScrobbleMultiParams
@@ -77,7 +76,7 @@ func ImportLog(path *string, offset float64, colours *bool) (lastfm.ScrobbleMult
 
 		trackObj, err := track.StringToTrack(line, offset)
 		if err != nil {
-			track.PrintResult(false, colours, trackObj.Artist, trackObj.Track)
+			track.PrintResult(false, colours, line[track.ARTIST_INDEX], line[track.TITLE_INDEX])
 			continue
 		}
 
