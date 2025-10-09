@@ -11,7 +11,6 @@ import (
 
 	"github.com/jeselnik/rb-scrobbler/internal/logFile"
 	"github.com/jeselnik/rb-scrobbler/internal/track"
-	"github.com/sonjek/go-lastfm/lastfm"
 	"github.com/twoscott/gobble-fm/session"
 )
 
@@ -35,7 +34,6 @@ Automatically ("keep", "delete" or "delete-on-success") at end of program`)
 		*colours = false
 	}
 
-	api := lastfm.New(API_KEY, API_SECRET)
 	fm := session.NewClient(API_KEY, API_SECRET)
 
 	/* First time Authentication */
@@ -54,24 +52,24 @@ Automatically ("keep", "delete" or "delete-on-success") at end of program`)
 		}
 
 		/* "Step 2" */
-		token, err := api.GetToken()
+		token, err := fm.Auth.Token()
 		if err != nil {
 			log.Fatal(err)
 		}
 
 		/* Step 3 */
-		authURL := api.GetAuthTokenUrl(token)
+		authURL := fm.AuthTokenURL(token)
 		fmt.Printf("Go to %q, allow access and press ENTER\n", authURL)
 		reader := bufio.NewReader(os.Stdin)
 		reader.ReadString('\n')
 
 		/* "Step 4" */
-		loginErr := api.LoginWithToken(token)
+		loginErr := fm.TokenLogin(token)
 		if loginErr != nil {
 			log.Fatal(loginErr)
 		}
 
-		sessionKey := api.GetSessionKey()
+		sessionKey := fm.SessionKey
 		/* Save session key in $CONFIG/rb-scrobbler */
 		keyPath, err := getKeyFilePath()
 		if err != nil {
@@ -83,15 +81,7 @@ Automatically ("keep", "delete" or "delete-on-success") at end of program`)
 			log.Fatal(err)
 		}
 
-		var userName string
-		getInfo, err := api.User.GetInfo(lastfm.P{})
-		if err != nil {
-			userName = "User"
-		} else {
-			userName = getInfo.Name
-		}
-
-		fmt.Printf("%s authenticated\n", userName)
+		fmt.Println("User successfully authenticated.")
 	}
 
 	if *logPath == "" {
