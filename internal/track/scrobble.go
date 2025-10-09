@@ -45,11 +45,7 @@ func Scrobble(api *session.Client, tracks lastfm.ScrobbleMultiParams, colours *b
 	success, fail int) {
 
 	for i := 0; i < len(tracks); i += API_TRACK_SUB_LIMIT {
-		end := i + API_TRACK_SUB_LIMIT
-		if end > len(tracks) {
-			end = len(tracks)
-		}
-		batch := tracks[i:end]
+		batch := tracks[i:min(i+API_TRACK_SUB_LIMIT, len(tracks))]
 
 		res, err := api.Track.ScrobbleMulti(batch)
 		if err != nil {
