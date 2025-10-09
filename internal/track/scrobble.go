@@ -57,7 +57,7 @@ func Scrobble(api *session.Client, tracks lastfm.ScrobbleMultiParams, colours *b
 			for _, scr := range tracks {
 				PrintResult(false, colours, scr.Artist, scr.Track)
 			}
-			return
+			continue
 		}
 
 		success += res.Accepted
