@@ -41,16 +41,14 @@ func PrintResult(success bool, colours *bool, artist string, trackName string) {
 	fmt.Println(msg.String())
 }
 
-func Scrobble(api *session.Client, tracks lastfm.ScrobbleMultiParams, colours *bool) (
-	success, fail int) {
-
+func Scrobble(api *session.Client, tracks lastfm.ScrobbleMultiParams, colours *bool) (success, fail int) {
 	for i := 0; i < len(tracks); i += API_TRACK_SUB_LIMIT {
 		batch := tracks[i:min(i+API_TRACK_SUB_LIMIT, len(tracks))]
 
 		res, err := api.Track.ScrobbleMulti(batch)
 		if err != nil {
-			fail += len(tracks)
-			for _, scr := range tracks {
+			fail += len(batch)
+			for _, scr := range batch {
 				PrintResult(false, colours, scr.Artist, scr.Track)
 			}
 			continue
