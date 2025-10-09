@@ -11,6 +11,7 @@ import (
 	"strings"
 
 	"github.com/jeselnik/rb-scrobbler/internal/track"
+	"github.com/twoscott/gobble-fm/lastfm"
 )
 
 const (
@@ -21,11 +22,11 @@ const (
 
 var ErrInvalidLog = errors.New("invalid .scrobbler.log")
 
-func ImportLog(path *string, offset int, colours *bool) ([]track.Track, error) {
+func ImportLog(path *string, offset float64, colours *bool) (lastfm.ScrobbleMultiParams, error) {
 
 	var (
 		logErr error = nil
-		tracks []track.Track
+		tracks lastfm.ScrobbleMultiParams
 	)
 
 	f, err := os.Open(*path)
