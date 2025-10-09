@@ -77,7 +77,7 @@ func ImportLog(path *string, offset float64, colours *bool) (lastfm.ScrobbleMult
 
 		trackObj, err := track.StringToTrack(line, offset)
 		if err != nil {
-			track.PrintResult(false, colours, trackObj)
+			track.PrintResult(false, colours, trackObj.Artist, trackObj.Track)
 			continue
 		}
 
@@ -99,7 +99,7 @@ func deleteLogFile(path *string) (exitCode int) {
 	return exitCode
 }
 
-func HandleFile(nonInteractive, logPath *string, fail uint) int {
+func HandleFile(nonInteractive, logPath *string, fail int) int {
 	exitCode := 0
 
 	switch *nonInteractive {

@@ -14,7 +14,7 @@ const (
 	CLEAR = "\u001b[0m"
 )
 
-func PrintResult(success bool, colours *bool, track lastfm.ScrobbleParams) {
+func PrintResult(success bool, colours *bool, artist string, trackName string) {
 	var msg strings.Builder
 
 	if success && *colours {
@@ -33,33 +33,34 @@ func PrintResult(success bool, colours *bool, track lastfm.ScrobbleParams) {
 		msg.WriteString(CLEAR)
 	}
 
-	msg.WriteString(track.Artist)
+	msg.WriteString(artist)
 	msg.WriteString(" - ")
-	msg.WriteString(track.Track)
+	msg.WriteString(trackName)
 
 	fmt.Println(msg.String())
 }
 
 func Scrobble(api *session.Client, tracks lastfm.ScrobbleMultiParams, colours *bool) (
-	success, fail uint) {
+	success, fail int) {
 
-	for _, track := range tracks {
-		isSuccess := false
-
-		res, err := api.Track.Scrobble(track)
-		if err != nil {
-			fail++
-			PrintResult(isSuccess, colours, track)
+	res, err := api.Track.ScrobbleMulti(tracks)
+	if err != nil {
+		fail += len(tracks)
+		for _, scr := range tracks {
+			PrintResult(false, colours, scr.Artist, scr.Track)
 		}
+		return
+	}
 
-		if res.Scrobble.Ignored.Code == lastfm.ScrobbleNotIgnored {
-			isSuccess = true
-			success++
-		} else {
-			fail++
+	success += res.Accepted
+	fail += res.Ignored
+
+	for _, scr := range res.Scrobbles {
+		success := true
+		if scr.Ignored.Code != lastfm.ScrobbleNotIgnored {
+			success = false
 		}
-
-		PrintResult(isSuccess, colours, track)
+		PrintResult(success, colours, scr.Artist.Name, scr.Track.Title)
 	}
 
 	return
