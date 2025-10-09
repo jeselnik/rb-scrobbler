@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/sonjek/go-lastfm/lastfm"
+	"github.com/twoscott/gobble-fm/lastfm"
+	"github.com/twoscott/gobble-fm/session"
 )
 
 const (
@@ -13,7 +14,7 @@ const (
 	CLEAR = "\u001b[0m"
 )
 
-func PrintResult(success bool, colours *bool, track Track) {
+func PrintResult(success bool, colours *bool, track lastfm.ScrobbleParams) {
 	var msg strings.Builder
 
 	if success && *colours {
@@ -32,36 +33,30 @@ func PrintResult(success bool, colours *bool, track Track) {
 		msg.WriteString(CLEAR)
 	}
 
-	msg.WriteString(track.artist)
+	msg.WriteString(track.Artist)
 	msg.WriteString(" - ")
-	msg.WriteString(track.title)
+	msg.WriteString(track.Track)
 
 	fmt.Println(msg.String())
 }
 
-func Scrobble(api *lastfm.Api, tracks []Track, colours *bool) (
+func Scrobble(api *session.Client, tracks lastfm.ScrobbleMultiParams, colours *bool) (
 	success, fail uint) {
 
 	for _, track := range tracks {
-		p := lastfm.P{
-			"artist":      track.artist,
-			"album":       track.album,
-			"track":       track.title,
-			"duration":    track.duration,
-			"trackNumber": track.position,
-			"timestamp":   track.timestamp,
-			"mbid":        track.mbid,
-			"albumArtist": track.albumArtist,
-		}
-
 		isSuccess := false
 
-		res, err := api.Track.Scrobble(p)
-		if err != nil || res.Ignored != "0" {
+		res, err := api.Track.Scrobble(track)
+		if err != nil {
 			fail++
-		} else {
+			PrintResult(isSuccess, colours, track)
+		}
+
+		if res.Scrobble.Ignored.Code == lastfm.ScrobbleNotIgnored {
 			isSuccess = true
 			success++
+		} else {
+			fail++
 		}
 
 		PrintResult(isSuccess, colours, track)

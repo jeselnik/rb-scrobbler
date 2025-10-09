@@ -12,6 +12,7 @@ import (
 	"github.com/jeselnik/rb-scrobbler/internal/logFile"
 	"github.com/jeselnik/rb-scrobbler/internal/track"
 	"github.com/sonjek/go-lastfm/lastfm"
+	"github.com/twoscott/gobble-fm/session"
 )
 
 const SECONDS_IN_HOUR = 3600
@@ -35,6 +36,7 @@ Automatically ("keep", "delete" or "delete-on-success") at end of program`)
 	}
 
 	api := lastfm.New(API_KEY, API_SECRET)
+	fm := session.NewClient(API_KEY, API_SECRET)
 
 	/* First time Authentication */
 	if *auth {
@@ -110,9 +112,9 @@ Automatically ("keep", "delete" or "delete-on-success") at end of program`)
 	if err != nil {
 		log.Fatal(err)
 	}
-	api.SetSession(sessionKey)
+	fm.SetSessionKey(sessionKey)
 
-	success, fail := track.Scrobble(api, tracks, colours)
+	success, fail := track.Scrobble(fm, tracks, colours)
 	fmt.Printf("\nFinished: %d tracks scrobbled, %d failed, %d total\n",
 		success, fail, len(tracks))
 
