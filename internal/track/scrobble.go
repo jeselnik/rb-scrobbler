@@ -9,9 +9,10 @@ import (
 )
 
 const (
-	GREEN = "\u001b[32;1m"
-	RED   = "\u001b[31;1m"
-	CLEAR = "\u001b[0m"
+	API_TRACK_SUB_LIMIT = 50
+	GREEN               = "\u001b[32;1m"
+	RED                 = "\u001b[31;1m"
+	CLEAR               = "\u001b[0m"
 )
 
 func PrintResult(success bool, colours *bool, artist string, trackName string) {
@@ -43,24 +44,32 @@ func PrintResult(success bool, colours *bool, artist string, trackName string) {
 func Scrobble(api *session.Client, tracks lastfm.ScrobbleMultiParams, colours *bool) (
 	success, fail int) {
 
-	res, err := api.Track.ScrobbleMulti(tracks)
-	if err != nil {
-		fail += len(tracks)
-		for _, scr := range tracks {
-			PrintResult(false, colours, scr.Artist, scr.Track)
+	for i := 0; i < len(tracks); i += API_TRACK_SUB_LIMIT {
+		end := i + API_TRACK_SUB_LIMIT
+		if end > len(tracks) {
+			end = len(tracks)
 		}
-		return
-	}
+		batch := tracks[i:end]
 
-	success += res.Accepted
-	fail += res.Ignored
-
-	for _, scr := range res.Scrobbles {
-		success := true
-		if scr.Ignored.Code != lastfm.ScrobbleNotIgnored {
-			success = false
+		res, err := api.Track.ScrobbleMulti(batch)
+		if err != nil {
+			fail += len(tracks)
+			for _, scr := range tracks {
+				PrintResult(false, colours, scr.Artist, scr.Track)
+			}
+			return
 		}
-		PrintResult(success, colours, scr.Artist.Name, scr.Track.Title)
+
+		success += res.Accepted
+		fail += res.Ignored
+
+		for _, scr := range res.Scrobbles {
+			success := true
+			if scr.Ignored.Code != lastfm.ScrobbleNotIgnored {
+				success = false
+			}
+			PrintResult(success, colours, scr.Artist.Name, scr.Track.Title)
+		}
 	}
 
 	return
