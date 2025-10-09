@@ -4,6 +4,8 @@ import (
 	"strconv"
 	"testing"
 	"time"
+
+	"github.com/twoscott/gobble-fm/lastfm"
 )
 
 const (
@@ -16,21 +18,20 @@ func TestLogLineToTrack(t *testing.T) {
 		name          string
 		input         []string
 		offset        int
-		expectedTrack Track
+		expectedTrack lastfm.ScrobbleParams
 	}{
 		{"SkipTrack",
 			[]string{"50 Cent", "Get Rich Or Die Tryin'", "In Da Club", "2", "179", "S", "1579643462"},
 			ZERO_OFFSET,
-			Track{
-				artist:      "50 Cent",
-				album:       "Get Rich Or Die Tryin'",
-				title:       "In Da Club",
-				position:    "2",
-				duration:    "179",
-				rating:      "S",
+			lastfm.ScrobbleParams{
+				Artist:      "50 Cent",
+				Album:       "Get Rich Or Die Tryin'",
+				Track:       "In Da Club",
+				TrackNumber: 2,
+				Duration:    lastfm.DurationSeconds(179),
 				timestamp:   "1579643462",
-				mbid:        "",
-				albumArtist: "",
+				MBID:        "",
+				AlbumArtist: "",
 			},
 		},
 		{"TimelessSupport",
