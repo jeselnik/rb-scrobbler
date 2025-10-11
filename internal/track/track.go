@@ -84,11 +84,11 @@ func StringToTrack(line []string, offset float64) (lastfm.ScrobbleParams, error)
 
 /* Convert back/to UTC from localtime */
 func convertTimeStamp(timestamp string, offset float64) (time.Time, error) {
-	timestampFlt, err := strconv.Atoi(timestamp)
+	timestampFlt, err := strconv.ParseFloat(timestamp, 64)
 	if err != nil {
 		return time.Time{}, err
 	}
 
-	converted := float64(timestampFlt) - offset
+	converted := timestampFlt - offset
 	return time.Unix(int64(converted), 0), nil
 }
