@@ -8,17 +8,20 @@ import (
 )
 
 const (
-	LISTENED           = "L"
-	ARTIST_INDEX       = 0
-	ALBUM_INDEX        = 1
-	TITLE_INDEX        = 2
-	POSITION_INDEX     = 3
-	DURATION_INDEX     = 4
-	RATING_INDEX       = 5
-	TIMESTAMP_INDEX    = 6
-	MBID_INDEX         = 7
-	ALBUM_ARTIST_INDEX = 8
-	TIMESTAMP_NO_RTC   = "0"
+	LISTENED         = "L"
+	TIMESTAMP_NO_RTC = "0"
+)
+
+const (
+	ARTIST_INDEX = iota
+	ALBUM_INDEX
+	TITLE_INDEX
+	POSITION_INDEX
+	DURATION_INDEX
+	RATING_INDEX
+	TIMESTAMP_INDEX
+	MBID_INDEX
+	ALBUM_ARTIST_INDEX
 )
 
 func StringToTrack(line []string, offset float64) (lastfm.ScrobbleParams, error) {
