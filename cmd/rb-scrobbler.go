@@ -35,6 +35,7 @@ Automatically ("keep", "delete" or "delete-on-success") at end of program`)
 	}
 
 	fm := session.NewClient(API_KEY, API_SECRET)
+	fm.UserAgent = "rb-scrobbler (https://github.com/jeselnik/rb-scrobbler)"
 
 	/* First time Authentication */
 	if *auth {
