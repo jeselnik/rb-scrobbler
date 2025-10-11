@@ -26,7 +26,9 @@ const (
 
 func StringToTrack(line []string, offset float64) (lastfm.ScrobbleParams, error) {
 	var (
+		albumArtist  string
 		duration     int
+		mbid         string
 		position     int
 		timestamp    time.Time
 		durationRaw  string = line[DURATION_INDEX]
@@ -58,12 +60,10 @@ func StringToTrack(line []string, offset float64) (lastfm.ScrobbleParams, error)
 		timestamp, err = convertTimeStamp(timestampRaw, offset)
 	}
 
-	mbid := ""
 	if len(line) > 7 {
 		mbid = line[MBID_INDEX]
 	}
 
-	albumArtist := ""
 	if len(line) > 8 {
 		albumArtist = line[ALBUM_ARTIST_INDEX]
 	}
