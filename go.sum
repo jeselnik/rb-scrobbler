@@ -4,4 +4,6 @@ github.com/google/go-querystring v1.1.0 h1:AnCroh3fv4ZBgVIf1Iwtovgjaw/GiKJo8M8yD
 github.com/google/go-querystring v1.1.0/go.mod h1:Kcdr2DB4koayq7X8pmAG4sNG59So17icRSOU623lUBU=
 github.com/twoscott/gobble-fm v1.0.7 h1:u/V3GgGbDoEM/Ok3xxp3zADvCi1X1vZHHvfUY/P8vhQ=
 github.com/twoscott/gobble-fm v1.0.7/go.mod h1:2AXW+YkZ35vjWgTzzcBwtyBYdAUTrSK9G9+6AJXm/7U=
+github.com/twoscott/gobble-fm v1.0.8 h1:Ambe1MhNiEWFEo2Pi4lj6U2y3Dg7ujE0hqfO0b1TWhY=
+github.com/twoscott/gobble-fm v1.0.8/go.mod h1:2AXW+YkZ35vjWgTzzcBwtyBYdAUTrSK9G9+6AJXm/7U=
 golang.org/x/xerrors v0.0.0-20191204190536-9bdfabe68543/go.mod h1:I/5z698sn9Ka8TeJc9MKroUUfqBBauWjQqLJ2OPfmY0=
