@@ -53,10 +53,8 @@ func StringToTrack(line []string, offset float64) (lastfm.ScrobbleParams, error)
 	date them with the current local time */
 	if timestampRaw == TIMESTAMP_NO_RTC {
 		timestamp = time.Now().UTC()
-	}
-
-	/* Time conversion - the API wants it in UTC timezone */
-	if offset != 0 {
+	} else {
+		/* Convert from unix epoch to time obj */
 		timestamp, err = convertTimeStamp(timestampRaw, offset)
 	}
 
