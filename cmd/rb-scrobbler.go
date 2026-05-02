@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"runtime"
 
 	"github.com/jeselnik/rb-scrobbler/internal/logFile"
 	"github.com/jeselnik/rb-scrobbler/internal/track"
@@ -27,12 +26,6 @@ Automatically ("keep", "delete" or "delete-on-success") at end of program`)
 	colours := flag.Bool("nc", true,
 		"No Terminal Colours (Default behaviour on Windows)")
 	flag.Parse()
-
-	/* Windows CMD doesn't support esc code colours, default
-	it to false */
-	if runtime.GOOS == "windows" {
-		*colours = false
-	}
 
 	fm := session.NewClient(API_KEY, API_SECRET)
 	fm.UserAgent = "rb-scrobbler (https://github.com/jeselnik/rb-scrobbler)"
