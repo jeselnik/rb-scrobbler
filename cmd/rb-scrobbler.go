@@ -24,7 +24,7 @@ func main() {
 Automatically ("keep", "delete" or "delete-on-success") at end of program`)
 	auth := flag.Bool("auth", false, "First Time Authentication")
 	colours := flag.Bool("nc", true,
-		"No Terminal Colours (Default behaviour on Windows)")
+		"No Terminal Colours")
 	batch := flag.Bool("batch", true, "Batch Scrobbling")
 	flag.Parse()
 
