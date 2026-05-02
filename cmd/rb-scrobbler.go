@@ -23,8 +23,8 @@ func main() {
 		`Non Interactive Mode:
 Automatically ("keep", "delete" or "delete-on-success") at end of program`)
 	auth := flag.Bool("auth", false, "First Time Authentication")
-	colours := flag.Bool("nc", true,
-		"No Terminal Colours")
+	colours := flag.Bool("c", true,
+		"Terminal Colours")
 	batch := flag.Bool("batch", true, "Batch Scrobbling")
 	flag.Parse()
 
