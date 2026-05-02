@@ -25,6 +25,7 @@ Automatically ("keep", "delete" or "delete-on-success") at end of program`)
 	auth := flag.Bool("auth", false, "First Time Authentication")
 	colours := flag.Bool("nc", true,
 		"No Terminal Colours (Default behaviour on Windows)")
+	batch := flag.Bool("batch", true, "Batch Scrobbling")
 	flag.Parse()
 
 	fm := session.NewClient(API_KEY, API_SECRET)
@@ -98,7 +99,7 @@ Automatically ("keep", "delete" or "delete-on-success") at end of program`)
 	}
 	fm.SetSessionKey(sessionKey)
 
-	success, fail := track.Scrobble(fm, tracks, colours)
+	success, fail := track.Scrobble(fm, tracks, colours, batch)
 	fmt.Printf("\nFinished: %d tracks scrobbled, %d failed, %d total\n",
 		success, fail, len(tracks))
 

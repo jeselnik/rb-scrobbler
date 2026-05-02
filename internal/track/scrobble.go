@@ -41,28 +41,42 @@ func PrintResult(success bool, colours *bool, artist string, trackName string) {
 	fmt.Println(msg.String())
 }
 
-func Scrobble(api *session.Client, tracks lastfm.ScrobbleMultiParams, colours *bool) (success, fail int) {
-	for i := 0; i < len(tracks); i += API_TRACK_SUB_LIMIT {
-		batch := tracks[i:min(i+API_TRACK_SUB_LIMIT, len(tracks))]
+func Scrobble(api *session.Client, tracks lastfm.ScrobbleMultiParams, colours *bool, batch *bool) (success, fail int) {
+	if *batch {
+		for i := 0; i < len(tracks); i += API_TRACK_SUB_LIMIT {
+			batch := tracks[i:min(i+API_TRACK_SUB_LIMIT, len(tracks))]
 
-		res, err := api.Track.ScrobbleMulti(batch)
-		if err != nil {
-			fail += len(batch)
-			for _, scr := range batch {
-				PrintResult(false, colours, scr.Artist, scr.Track)
+			res, err := api.Track.ScrobbleMulti(batch)
+			if err != nil {
+				fail += len(batch)
+				for _, scr := range batch {
+					PrintResult(false, colours, scr.Artist, scr.Track)
+				}
+				continue
 			}
-			continue
+
+			success += res.Accepted
+			fail += res.Ignored
+
+			for _, scr := range res.Scrobbles {
+				success := true
+				if scr.Ignored.Code != lastfm.ScrobbleNotIgnored {
+					success = false
+				}
+				PrintResult(success, colours, scr.Artist.Name, scr.Track.Title)
+			}
 		}
-
-		success += res.Accepted
-		fail += res.Ignored
-
-		for _, scr := range res.Scrobbles {
-			success := true
-			if scr.Ignored.Code != lastfm.ScrobbleNotIgnored {
-				success = false
+	} else {
+		for _, scr := range tracks {
+			res, err := api.Track.Scrobble(scr)
+			/* hacky workaround for the library returning IntBool instead of int */
+			if err != nil || res.Accepted != lastfm.IntBool(true) {
+				fail++
+				PrintResult(false, colours, scr.Artist, scr.Track)
+				continue
 			}
-			PrintResult(success, colours, scr.Artist.Name, scr.Track.Title)
+			success++
+			PrintResult(true, colours, scr.Artist, scr.Track)
 		}
 	}
 
