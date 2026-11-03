@@ -2,5 +2,5 @@ github.com/google/go-cmp v0.6.0 h1:ofyhxvXcZhMsU5ulbFiLKl/XBFqE1GSq7atu8tAmTRI=
 github.com/google/go-cmp v0.6.0/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeNGIjoY=
 github.com/google/go-querystring v1.2.0 h1:yhqkPbu2/OH+V9BfpCVPZkNmUXhb2gBxJArfhIxNtP0=
 github.com/google/go-querystring v1.2.0/go.mod h1:8IFJqpSRITyJ8QhQ13bmbeMBDfmeEJZD5A0egEOmkqU=
-github.com/twoscott/gobble-fm v1.0.9 h1:FfEKNbalQo/FK5IV7Pn/Jp39Tku98uNsnyuQK6/eyoQ=
-github.com/twoscott/gobble-fm v1.0.9/go.mod h1:uiQfweUmQu8bxrlP+2e8wSeoMgV/OfV7FAZvOXewyUk=
+github.com/twoscott/gobble-fm v1.0.10 h1:2qvRylfi3KCbjWuj24OdYHpH/jS8mJ1wj77k+wRsrZs=
+github.com/twoscott/gobble-fm v1.0.10/go.mod h1:uiQfweUmQu8bxrlP+2e8wSeoMgV/OfV7FAZvOXewyUk=
